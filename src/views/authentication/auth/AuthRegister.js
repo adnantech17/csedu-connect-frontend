@@ -1,40 +1,103 @@
 import React from 'react';
 import { Box, Typography, Button } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { FormBuilder, Input } from 'src/components/forms/FormBuilder';
+import { register } from 'src/services/query/user';
 
-import CustomTextField from '../../../components/forms/theme-elements/CustomTextField';
-import { Stack } from '@mui/system';
-
-const AuthRegister = ({ title, subtitle, subtext }) => (
+const AuthRegister = ({ title, subtitle, subtext }) => {
+  const handleSubmit = async (data) => {
+    try {
+      const res = await register(data);
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    } finally {
+    }
+  };
+  return (
     <>
-        {title ? (
-            <Typography fontWeight="700" variant="h2" mb={1}>
-                {title}
-            </Typography>
-        ) : null}
+      {title ? (
+        <Typography fontWeight="700" variant="h2" mb={1}>
+          {title}
+        </Typography>
+      ) : null}
 
-        {subtext}
+      {subtext}
 
-        <Box>
-            <Stack mb={3}>
-                <Typography variant="subtitle1"
-                    fontWeight={600} component="label" htmlFor='name' mb="5px">Name</Typography>
-                <CustomTextField id="name" variant="outlined" fullWidth />
-
-                <Typography variant="subtitle1"
-                    fontWeight={600} component="label" htmlFor='email' mb="5px" mt="25px">Email Address</Typography>
-                <CustomTextField id="email" variant="outlined" fullWidth />
-
-                <Typography variant="subtitle1"
-                    fontWeight={600} component="label" htmlFor='password' mb="5px" mt="25px">Password</Typography>
-                <CustomTextField id="password" variant="outlined" fullWidth />
-            </Stack>
-            <Button color="primary" variant="contained" size="large" fullWidth component={Link} to="/auth/login">
-                Sign Up
-            </Button>
-        </Box>
-        {subtitle}
+      <FormBuilder onSubmit={handleSubmit}>
+        {(register, errors, { control }) => {
+          return (
+            <>
+              <div className="row mt-3">
+                <Input
+                  name="first_name"
+                  errors={errors}
+                  required={true}
+                  register={register}
+                  class_name="col-12"
+                  label={'First Name'}
+                />
+                <Input
+                  name="last_name"
+                  errors={errors}
+                  required={true}
+                  register={register}
+                  class_name="col-12"
+                  label={'Last Name'}
+                />
+                <Input
+                  name="username"
+                  errors={errors}
+                  required={true}
+                  register={register}
+                  class_name="col-12"
+                  label={'Username'}
+                />
+                <Input
+                  name="email"
+                  errors={errors}
+                  required={true}
+                  register={register}
+                  class_name="col-12"
+                  label={'Email'}
+                />
+                <Input
+                  name="password"
+                  type="password"
+                  register={register}
+                  errors={errors}
+                  required={true}
+                  class_name="col-12"
+                  label={'Password'}
+                />
+                <Input
+                  name="batch"
+                  register={register}
+                  errors={errors}
+                  required={true}
+                  class_name="col-12"
+                  label={'Batch'}
+                />
+                <Input
+                  name="code"
+                  register={register}
+                  errors={errors}
+                  required={true}
+                  class_name="col-12"
+                  label={'Code'}
+                />
+                <Box>
+                  <Button color="primary" variant="contained" size="large" fullWidth type="submit">
+                    Register
+                  </Button>
+                </Box>
+              </div>
+            </>
+          );
+        }}
+      </FormBuilder>
+      {subtitle}
     </>
-);
+  );
+};
 
 export default AuthRegister;

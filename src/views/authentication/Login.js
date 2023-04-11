@@ -8,9 +8,6 @@ import Logo from 'src/layouts/full/shared/logo/Logo';
 import AuthLogin from './auth/AuthLogin';
 
 const Login2 = () => {
-
-  
-  
   return (
     <PageContainer title="Login" description="this is Login page">
       <Box
@@ -41,12 +38,12 @@ const Login2 = () => {
           >
             <Card elevation={9} sx={{ p: 4, zIndex: 1, width: '100%', maxWidth: '500px' }}>
               <Box display="flex" alignItems="center" justifyContent="center">
-                <Logo />
+                <h3>CSEDU Connect</h3>
               </Box>
               <AuthLogin
                 subtext={
                   <Typography variant="subtitle1" textAlign="center" color="textSecondary" mb={1}>
-                    Your Social Campaigns
+                    A CSEDU Social Network
                   </Typography>
                 }
                 subtitle={

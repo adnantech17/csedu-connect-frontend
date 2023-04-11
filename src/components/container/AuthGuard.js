@@ -7,12 +7,11 @@ const AuthGuard = ({ children }) => {
   const { isAuthenticated, isFetchingUserData, userData } = useContext(AuthContext);
 
   useEffect(() => {
-    console.log(isFetchingUserData, isAuthenticated, userData)
     if (isFetchingUserData) return;
     if (!userData?.id) navigate('/auth/login');
   }, [window.location.href, isAuthenticated, isFetchingUserData]);
 
-  return !isFetchingUserData && (userData?.id) ? children : null;
+  return !isFetchingUserData && userData?.id ? children : null;
 };
 
 export default AuthGuard;

@@ -1,15 +1,12 @@
-import { responsiveFontSizes } from "@mui/material";
-import React, { createContext, useCallback, useEffect, useState } from "react";
-import { useNavigate } from "react-router";
-import {
-  STORAGE_KEY_ACCESS_TOKEN,
-  STORAGE_KEY_REFRESH_TOKEN,
-} from "src/constants/localstorage";
-import { login } from "src/services/query/login";
-import { getUserDetails } from "src/services/query/user";
-import { privateAxios } from "src/services/request/axiosConfig";
-import { setTokenInHeader } from "src/services/request/axiosHelper";
-import { LocalStorage } from "src/services/storage/localstorage";
+import { responsiveFontSizes } from '@mui/material';
+import React, { createContext, useCallback, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
+import { STORAGE_KEY_ACCESS_TOKEN, STORAGE_KEY_REFRESH_TOKEN } from 'src/constants/localstorage';
+import { login } from 'src/services/query/login';
+import { getUserDetails } from 'src/services/query/user';
+import { privateAxios } from 'src/services/request/axiosConfig';
+import { setTokenInHeader } from 'src/services/request/axiosHelper';
+import { LocalStorage } from 'src/services/storage/localstorage';
 
 export const AuthContext = createContext();
 
@@ -30,7 +27,6 @@ export const AuthContextProvider = ({ children }) => {
     setIsFetchingUserData(true);
     try {
       const data = await getUserDetails();
-      console.log(data);
       setUserData(data);
     } catch (error) {
     } finally {
@@ -44,21 +40,12 @@ export const AuthContextProvider = ({ children }) => {
 
   const handleSuccess = useCallback(
     (data) => {
-      console.log(data);
-      LocalStorage.setData(
-        localStorage,
-        STORAGE_KEY_ACCESS_TOKEN,
-        data.token
-      );
-      LocalStorage.setData(
-        localStorage,
-        STORAGE_KEY_REFRESH_TOKEN,
-        data.token
-      );
+      LocalStorage.setData(localStorage, STORAGE_KEY_ACCESS_TOKEN, data.token);
+      LocalStorage.setData(localStorage, STORAGE_KEY_REFRESH_TOKEN, data.token);
       initialize();
-      navigate('/accounts-management')
+      navigate('/accounts-management');
     },
-    [initialize]
+    [initialize],
   );
 
   const logout = useCallback(() => {
@@ -72,14 +59,14 @@ export const AuthContextProvider = ({ children }) => {
       try {
         const res = await login(params);
         // if (!data.success) throw data;
-        // if (data.success) 
+        // if (data.success)
         handleSuccess(res.data);
         return res;
       } catch (error) {
         throw error;
       }
     },
-    [handleSuccess]
+    [handleSuccess],
   );
 
   // const updateProfile = useCallback(
@@ -96,7 +83,7 @@ export const AuthContextProvider = ({ children }) => {
   //   [setUserData]
   // );
 
-  useEffect(() => { }, []);
+  useEffect(() => {}, []);
 
   return (
     <AuthContext.Provider
