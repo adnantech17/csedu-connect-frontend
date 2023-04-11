@@ -15,11 +15,8 @@ const TableWithFilter = ({ columns, fetchData, filterFields }) => {
 
   const fetch = async data => {
     try {
-      const res = await fetchData(data)
-      if (res.success) {
-        setTableData(res.data)
-        setCount(res.meta?.count || 0)
-      }
+      const res = await fetchData({page_size: 10, page: 1,...data})
+      setTableData(res.results)
     } catch (error) {
       console.log(error)
     }

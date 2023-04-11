@@ -1,5 +1,6 @@
 import { responsiveFontSizes } from "@mui/material";
 import React, { createContext, useCallback, useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 import {
   STORAGE_KEY_ACCESS_TOKEN,
   STORAGE_KEY_REFRESH_TOKEN,
@@ -15,6 +16,7 @@ export const AuthContext = createContext();
 export const AuthContextProvider = ({ children }) => {
   const [isFetchingUserData, setIsFetchingUserData] = useState(false);
   const [userData, setUserData] = useState();
+  const navigate = useNavigate();
 
   const getToken = useCallback(() => {
     return LocalStorage.getData(localStorage, STORAGE_KEY_ACCESS_TOKEN);
@@ -28,6 +30,7 @@ export const AuthContextProvider = ({ children }) => {
     setIsFetchingUserData(true);
     try {
       const data = await getUserDetails();
+      console.log(data);
       setUserData(data);
     } catch (error) {
     } finally {
@@ -41,17 +44,19 @@ export const AuthContextProvider = ({ children }) => {
 
   const handleSuccess = useCallback(
     (data) => {
+      console.log(data);
       LocalStorage.setData(
         localStorage,
         STORAGE_KEY_ACCESS_TOKEN,
-        data.access_token
+        data.token
       );
       LocalStorage.setData(
         localStorage,
         STORAGE_KEY_REFRESH_TOKEN,
-        data.refresh_token
+        data.token
       );
       initialize();
+      navigate('/accounts-management')
     },
     [initialize]
   );

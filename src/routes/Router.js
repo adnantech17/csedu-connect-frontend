@@ -9,6 +9,7 @@ import Event from 'src/views/user/events/Event';
 import Students from 'src/views/user/students/Students';
 import Blogs from 'src/views/user/blogs/Blogs';
 import Profile from 'src/views/dashboard/Profile';
+import AuthGuard from 'src/components/container/AuthGuard';
 
 /* ***Layouts**** */
 const FullLayout = Loadable(lazy(() => import('../layouts/full/FullLayout')));
@@ -29,19 +30,18 @@ const Router = [
     path: '/',
     element: <FullLayout />,
     children: [
-      { path: '/', element: <Navigate to="/dashboard" /> },
-      { path: '/dashboard', exact: true, element: <Dashboard /> },
-      { path: '/users-management', exact: true, element: <UsersManagement /> },
-      { path: '/events-management', exact: true, element: <EventsManagement /> },
-      { path: '/emails-management', exact: true, element: <EmailsManagement /> },
-      { path: '/emails-list', exact: true, element: <Emails /> },
-      { path: '/events-list', exact: true, element: <Event /> },
-      { path: '/students-list', exact: true, element: <Students /> },
-      { path: '/blogs-list', exact: true, element: <Blogs /> },
-      { path: '/accounts-management', exact: true, element: <Profile /> },
-      { path: '/icons', exact: true, element: <Icons /> },
-      { path: '/ui/typography', exact: true, element: <TypographyPage /> },
-      { path: '/ui/shadow', exact: true, element: <Shadow /> },
+      { path: '/', element: <Navigate to="/accounts-management" /> },
+      { path: '/users-management', exact: true, element: <AuthGuard><UsersManagement /></AuthGuard> },
+      { path: '/events-management', exact: true, element: <AuthGuard><EventsManagement /></AuthGuard> },
+      { path: '/emails-management', exact: true, element: <AuthGuard><EmailsManagement /></AuthGuard> },
+      { path: '/emails-list', exact: true, element: <AuthGuard><Emails /></AuthGuard> },
+      { path: '/events-list', exact: true, element: <AuthGuard><Event /></AuthGuard> },
+      { path: '/students-list', exact: true, element: <AuthGuard><Students /></AuthGuard> },
+      { path: '/blogs-list', exact: true, element: <AuthGuard><Blogs /></AuthGuard> },
+      { path: '/accounts-management', exact: true, element: <AuthGuard><Profile /></AuthGuard> },
+      { path: '/icons', exact: true, element: <AuthGuard><Icons /></AuthGuard> },
+      { path: '/ui/typography', exact: true, element: <AuthGuard><TypographyPage /></AuthGuard> },
+      { path: '/ui/shadow', exact: true, element: <AuthGuard><Shadow /></AuthGuard> },      
       { path: '*', element: <Navigate to="/auth/404" /> },
     ],
   },

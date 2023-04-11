@@ -7,11 +7,13 @@ import CardHeader from '@mui/material/CardHeader'
 import { FormBuilder, Select, Textarea } from 'src/components/forms/FormBuilder'
 import FormModalButton from 'src/components/tables/FormModalButton'
 import TableWithFilter from 'src/components/tables/TableWithFilter'
+import { useEffect } from 'react'
+import { getUsers } from 'src/services/query/user'
 
 const columns = [
-  { id: 'name', label: 'Name' },
+  { id: 'username', label: 'Name' },
   { id: 'age', label: 'Age' },
-  { id: 'email', label: 'Email' },
+  { id: 'email_address', label: 'Email' },
   { id: 'sex', label: 'Sex' },
   { id: 'location', label: 'Location' }
 ]
@@ -24,12 +26,6 @@ const users = [
   { id: 5, name: 'Tom', age: 21, email: 'tom@example.com', sex: 'Male', location: 'Miami' }
 ]
 
-function getUsers() {
-  return new Promise((resolve, reject) => {
-    resolve({ data: users, success: true, meta: { count: users.length } })
-  })
-}
-
 const filterFields = [
   { label: 'Name', field: 'name', type: 'string' },
   { label: 'Age', field: 'age', type: 'number' },
@@ -37,6 +33,7 @@ const filterFields = [
 ]
 
 const UsersManagement = () => {
+  
   return (
     <Grid container spacing={6}>
       <Grid item xs={12}>

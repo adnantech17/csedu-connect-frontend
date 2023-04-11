@@ -6,7 +6,7 @@ const getToken = () => {
 };
 
 export const setTokenInHeader = (config) => {
-  config.headers["Authorization"] = `Bearer ${getToken()}`;
+  config.headers["Authorization"] = `Token ${getToken()}`;
   return config;
 };
 

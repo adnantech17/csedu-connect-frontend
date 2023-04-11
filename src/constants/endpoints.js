@@ -1,5 +1,6 @@
 const endpoints = {
   LOGIN: 'accounts/login/',
-  PROFILE: 'accounts/profile'
+  PROFILE: 'accounts/profile/',
+  USERS: 'accounts/users/',
 };
 export default endpoints;
