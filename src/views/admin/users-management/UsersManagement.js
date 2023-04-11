@@ -14,10 +14,12 @@ import { useState } from 'react';
 
 const columns = [
   { id: 'username', label: 'Name' },
-  { id: 'age', label: 'Age' },
+  { id: 'first_name', label: 'First Name' },
+  { id: 'last_name', label: 'Last Name' },
   { id: 'email_address', label: 'Email' },
-  { id: 'sex', label: 'Sex' },
-  { id: 'location', label: 'Location' },
+  { id: 'batch_number', label: 'Batch' },
+  { id: 'company', label: 'Company' },
+  { id: 'country', label: 'Country' },
 ];
 
 const filterFields = [

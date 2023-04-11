@@ -69,15 +69,6 @@ const Profile = () => {
               </Box>
             }
           />
-          <Tab
-            value="info"
-            label={
-              <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <InfoOutlined />
-                <TabName>Info</TabName>
-              </Box>
-            }
-          />
         </TabList>
 
         <TabPanel sx={{ p: 0 }} value="account">

@@ -5,7 +5,7 @@ import { useContext, useState } from 'react';
 import { styled } from '@mui/material/styles';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
-import { FormBuilder, Input, Select } from '../forms/FormBuilder';
+import { DateInput, FormBuilder, Input, Select } from '../forms/FormBuilder';
 import { AuthContext } from 'src/context/AuthContext';
 import { updateUserProfile } from 'src/services/query/user';
 import { toast } from 'react-toastify';
@@ -43,7 +43,7 @@ const TabAccount = () => {
   const handleSubmit = async (data) => {
     try {
       console.log(userData);
-      const res = await updateUserProfile({ username: userData.user_name, ...data });
+      const res = await updateUserProfile({ username: userData.username, ...data });
       toast.success(`Profile Updated.`);
     } catch (error) {
       toast.error('Error updating Profile.');
@@ -95,11 +95,14 @@ const TabAccount = () => {
               </div>
               <div className="row mt-3">
                 <Input
+                  type="date"
                   name="date_of_birth"
                   errors={errors}
                   required={true}
-                  type="date"
                   register={register}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
                   class_name="col-6"
                   label={'Date of Birth'}
                 />
@@ -111,8 +114,8 @@ const TabAccount = () => {
                   class_name="col-6"
                   label={'Gender'}
                   options={[
-                    { name: 'Male', value: 'male' },
-                    { name: 'Female', value: 'female' },
+                    { name: 'Male', value: 'M' },
+                    { name: 'Female', value: 'F' },
                   ]}
                 />
               </div>

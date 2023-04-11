@@ -61,7 +61,9 @@ const TableWithFilter = ({ columns, fetchData, filterFields }) => {
           {tableData.map((row) => (
             <TableRow key={row.id}>
               {columns.map((column) => (
-                <TableCell key={column.id}>{row[column.id]}</TableCell>
+                <TableCell className="text-center" key={column.id}>
+                  {row[column.id] || '-'}
+                </TableCell>
               ))}
             </TableRow>
           ))}

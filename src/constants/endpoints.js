@@ -4,6 +4,6 @@ const endpoints = {
   USERS: 'accounts/users/',
   REGISTER: 'accounts/users/create/',
   REFERRALS: 'accounts/referrals/create/',
-  PROFILES: 'accounts/profiles/'
+  PROFILES: 'accounts/profile/',
 };
 export default endpoints;

@@ -32,7 +32,7 @@ export const createReferrals = async (data) => {
 };
 
 export const updateUserProfile = async (data) => {
-  return await privateAxios.post(`${endpoints.PROFILES}/${data.username}`, {
+  return await privateAxios.patch(`${endpoints.PROFILES}`, {
     ...data,
   });
 };
