@@ -125,6 +125,26 @@ const TabAccount = () => {
               </div>
               <div className="row mt-3">
                 <Input
+                  defaultValue={userData?.phone_number}
+                  name="phone_number"
+                  errors={errors}
+                  required={true}
+                  register={register}
+                  class_name="col-6"
+                  label={'Phone Number'}
+                />
+                <Input
+                  defaultValue={userData?.registration_number}
+                  name="registration_number"
+                  errors={errors}
+                  required={true}
+                  register={register}
+                  class_name="col-6"
+                  label={'Registration Number'}
+                />
+              </div>
+              <div className="row mt-3">
+                <Input
                   defaultValue={userData?.date_of_birth}
                   type="date"
                   name="date_of_birth"

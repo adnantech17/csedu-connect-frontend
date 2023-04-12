@@ -236,27 +236,6 @@ export function Select({
   );
 }
 
-// export default function Radio({ label, name, options, value, register, required, errors, className }) {
-//   return (
-//     <div className={className}>
-//       <div>
-//         <label>{label}</label>
-//       </div>
-//       <RadioGroup {...register(name, { required })} defaultValue={value}>
-//         {options.map(option => (
-//           <FormControlLabel
-//             key={option.value}
-//             value={option.value}
-//             control={<Radio color='primary' />}
-//             label={option.label}
-//           />
-//         ))}
-//       </RadioGroup>
-//       <InputError error={errors[name]} />
-//     </div>
-//   )
-// }
-
 export const InputError = ({ error, text, className }) => {
   if (!error) return null;
 
