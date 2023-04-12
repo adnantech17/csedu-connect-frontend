@@ -8,7 +8,7 @@ import { FormBuilder, Input } from 'src/components/forms/FormBuilder';
 import FormModalButton from 'src/components/tables/FormModalButton';
 import TableWithFilter from 'src/components/tables/TableWithFilter';
 import { createReferrals, getUsers } from 'src/services/query/user';
-import { Button } from '@mui/material';
+import { Button, Dialog, DialogContent, DialogTitle, TextField } from '@mui/material';
 import { toast } from 'react-toastify';
 import { useState } from 'react';
 
@@ -32,11 +32,15 @@ const filterFields = [
 
 const UsersManagement = () => {
   const [open, setOpen] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [referral, setReferral] = useState(null);
   const handleSubmit = async (data) => {
     try {
       const res = await createReferrals(data);
       setOpen(false);
       toast.success(`Your referral code is ${res.data.referral_code}`);
+      setDialogOpen(true);
+      setReferral(res.data.referral_code);
     } catch (error) {
       toast.error('Error creating Referral code.');
     } finally {
@@ -47,6 +51,19 @@ const UsersManagement = () => {
     <Grid container spacing={6}>
       <Grid item xs={12}>
         <Card>
+          <Dialog
+            open={dialogOpen}
+            onClose={() => {
+              setDialogOpen(false);
+              setReferral(null);
+            }}
+          >
+            <DialogTitle>Referral Code</DialogTitle>
+            <DialogContent className="d-flex align-items-center">
+              <p style={{ margin: 0, padding: 0, fontSize: 16 }}>Your referral code is: </p>
+              <TextField value={referral} />
+            </DialogContent>
+          </Dialog>
           <FormModalButton
             open={open}
             setOpen={setOpen}
@@ -60,7 +77,7 @@ const UsersManagement = () => {
                   <>
                     <div className="row mt-3">
                       <Input
-                        name="email"
+                        name="referred_email"
                         errors={errors}
                         required={true}
                         register={register}

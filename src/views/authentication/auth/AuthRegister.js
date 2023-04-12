@@ -1,15 +1,17 @@
 import React from 'react';
 import { Box, Typography, Button } from '@mui/material';
-import { FormBuilder, Input } from 'src/components/forms/FormBuilder';
+import { FormBuilder, Input, Select } from 'src/components/forms/FormBuilder';
 import { register } from 'src/services/query/user';
+import { toast } from 'react-toastify';
 
 const AuthRegister = ({ title, subtitle, subtext }) => {
   const handleSubmit = async (data) => {
     try {
       const res = await register(data);
+      toast.success('User created!');
       console.log(res);
     } catch (error) {
-      console.log(error);
+      toast.error('User creation failed!');
     } finally {
     }
   };
@@ -53,7 +55,7 @@ const AuthRegister = ({ title, subtitle, subtext }) => {
                   label={'Username'}
                 />
                 <Input
-                  name="email"
+                  name="email_address"
                   errors={errors}
                   required={true}
                   register={register}
@@ -70,15 +72,27 @@ const AuthRegister = ({ title, subtitle, subtext }) => {
                   label={'Password'}
                 />
                 <Input
-                  name="batch"
+                  name="batch_number"
                   register={register}
                   errors={errors}
                   required={true}
                   class_name="col-12"
                   label={'Batch'}
                 />
+                <Select
+                  name="sex"
+                  control={control}
+                  errors={errors}
+                  required={true}
+                  class_name="col-6"
+                  label={'Gender'}
+                  options={[
+                    { name: 'Male', value: 'M' },
+                    { name: 'Female', value: 'F' },
+                  ]}
+                />
                 <Input
-                  name="code"
+                  name="referral_code"
                   register={register}
                   errors={errors}
                   required={true}
