@@ -1,5 +1,5 @@
 import endpoints from 'src/constants/endpoints';
-import { privateAxios } from '../request/axiosConfig';
+import { privateAxios, axios } from '../request/axiosConfig';
 
 export const getUserDetails = async () => {
   try {
@@ -20,7 +20,7 @@ export const getUsers = async (data) => {
 };
 
 export const register = async (data) => {
-  return await privateAxios.post(endpoints.REGISTER, {
+  return await axios.post(endpoints.REGISTER, {
     ...data,
   });
 };
