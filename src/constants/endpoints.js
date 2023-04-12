@@ -1,5 +1,6 @@
 const endpoints = {
   LOGIN: 'accounts/login/',
+  LOGOUT: 'accounts/logout/',
   PROFILE: 'accounts/profile/',
   USERS: 'accounts/users/',
   REGISTER: 'accounts/create/users/',

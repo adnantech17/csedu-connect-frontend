@@ -34,7 +34,6 @@ function getData() {
 const EmailsManagement = () => {
   return (
     <div>
-      <Button onClick={() => login('admin', 'admin')}>Hello</Button>
       <Card>
         <FormModalButton
           className="d-flex m-3 justify-content-end"
@@ -74,7 +73,7 @@ const EmailsManagement = () => {
             }}
           </FormBuilder>
         </FormModalButton>
-        <CardHeader title="Sticky Header" titleTypographyProps={{ variant: 'h6' }} />
+        <CardHeader title="Email Management" titleTypographyProps={{ variant: 'h6' }} />
         <TableWithFilter columns={columns} filterFields={filterFields} fetchData={getData} />
       </Card>
     </div>

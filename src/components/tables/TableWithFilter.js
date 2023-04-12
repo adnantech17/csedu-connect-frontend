@@ -8,14 +8,33 @@ import {
   TableRow,
   Paper,
   TablePagination,
+  Card,
+  CardContent,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Typography,
 } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import FilterBuilder from './FilterBuilder';
+import Box from '@mui/material/Box';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+
+const useStyles = makeStyles({
+  table: {
+    minWidth: 650,
+  },
+  evenRow: {
+    backgroundColor: '#e5e5e5', // set a light color for even rows
+  },
+});
 
 const TableWithFilter = ({ columns, fetchData, filterFields }) => {
   const [tableData, setTableData] = useState([]);
   const [page, setPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [count, setCount] = useState(0);
+  const classes = useStyles();
 
   const handleFilterSubmit = (data) => {
     console.log(data);
@@ -46,29 +65,40 @@ const TableWithFilter = ({ columns, fetchData, filterFields }) => {
 
   return (
     <TableContainer component={Paper}>
-      {filterFields && (
-        <FilterBuilder filterFields={filterFields} handleFilterSubmit={handleFilterSubmit} />
-      )}
-      <Table>
-        <TableHead>
-          <TableRow>
-            {columns.map((column) => (
-              <TableCell key={column.id}>{column.label}</TableCell>
-            ))}
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {tableData.map((row) => (
-            <TableRow key={row.id}>
-              {columns.map((column) => (
-                <TableCell className="text-center" key={column.id}>
-                  {row[column.id] || '-'}
-                </TableCell>
+      <Accordion>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="filters" id="filters">
+          <Typography>Filters</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          {filterFields && (
+            <FilterBuilder filterFields={filterFields} handleFilterSubmit={handleFilterSubmit} />
+          )}
+        </AccordionDetails>
+      </Accordion>
+      <Card>
+        <CardContent>
+          <Table className={classes.table}>
+            <TableHead>
+              <TableRow>
+                {columns.map((column) => (
+                  <TableCell key={column.id}>{column.label}</TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {tableData.map((row, index) => (
+                <TableRow key={row.id} className={index % 2 === 0 ? classes.evenRow : ''}>
+                  {columns.map((column) => (
+                    <TableCell className="text-center" key={column.id}>
+                      {row[column.id] || '-'}
+                    </TableCell>
+                  ))}
+                </TableRow>
               ))}
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
       <TablePagination
         rowsPerPageOptions={[10, 20, 50]}
         component="div"

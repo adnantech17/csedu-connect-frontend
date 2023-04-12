@@ -99,7 +99,7 @@ const UsersManagement = () => {
               }}
             </FormBuilder>
           </FormModalButton>
-          <CardHeader title="Sticky Header" titleTypographyProps={{ variant: 'h6' }} />
+          <CardHeader title="User Management" titleTypographyProps={{ variant: 'h6' }} />
           <TableWithFilter columns={columns} filterFields={filterFields} fetchData={getUsers} />
         </Card>
       </Grid>

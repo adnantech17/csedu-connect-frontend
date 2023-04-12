@@ -69,7 +69,7 @@ const EventsManagement = () => {
     <Grid container spacing={6}>
       <Grid item xs={12}>
         <Card>
-          <CardHeader title="Sticky Header" titleTypographyProps={{ variant: 'h6' }} />
+          <CardHeader title="Events Management" titleTypographyProps={{ variant: 'h6' }} />
           <TableWithFilter columns={columns} filterFields={filterFields} fetchData={getData} />
         </Card>
       </Grid>

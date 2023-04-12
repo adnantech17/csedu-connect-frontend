@@ -2,7 +2,7 @@ import { responsiveFontSizes } from '@mui/material';
 import React, { createContext, useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { STORAGE_KEY_ACCESS_TOKEN, STORAGE_KEY_REFRESH_TOKEN } from 'src/constants/localstorage';
-import { login } from 'src/services/query/login';
+import { login, logout } from 'src/services/query/login';
 import { getUserDetails } from 'src/services/query/user';
 import { privateAxios } from 'src/services/request/axiosConfig';
 import { setTokenInHeader } from 'src/services/request/axiosHelper';
@@ -48,10 +48,18 @@ export const AuthContextProvider = ({ children }) => {
     [initialize],
   );
 
-  const logout = useCallback(() => {
-    LocalStorage.removeData(localStorage, STORAGE_KEY_ACCESS_TOKEN);
-    LocalStorage.removeData(localStorage, STORAGE_KEY_REFRESH_TOKEN);
-    setUserData(undefined);
+  const logoutUser = useCallback(async () => {
+    try {
+      const res = await logout();
+      // if (!data.success) throw data;
+      // if (data.success)
+      LocalStorage.removeData(localStorage, STORAGE_KEY_ACCESS_TOKEN);
+      LocalStorage.removeData(localStorage, STORAGE_KEY_REFRESH_TOKEN);
+      setUserData(undefined);
+      return res;
+    } catch (error) {
+      throw error;
+    }
   }, []);
 
   const loginToAccount = useCallback(
@@ -95,7 +103,7 @@ export const AuthContextProvider = ({ children }) => {
         getToken,
         loginToAccount,
         // updateProfile,
-        logout,
+        logoutUser,
         onLogin: handleSuccess,
       }}
     >
