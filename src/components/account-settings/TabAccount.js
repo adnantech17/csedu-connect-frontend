@@ -2,42 +2,15 @@
 import { useContext, useEffect, useState } from 'react';
 
 // ** MUI Imports
-import { styled } from '@mui/material/styles';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import { ArrayInput, FormBuilder, Input, Select } from '../forms/FormBuilder';
 import { AuthContext } from 'src/context/AuthContext';
 import { updateUserProfile } from 'src/services/query/user';
 import { toast } from 'react-toastify';
-
-const ImgStyled = styled('img')(({ theme }) => ({
-  width: 120,
-  height: 120,
-  marginRight: theme.spacing(6.25),
-  borderRadius: theme.shape.borderRadius,
-}));
-
-const ButtonStyled = styled(Button)(({ theme }) => ({
-  [theme.breakpoints.down('sm')]: {
-    width: '100%',
-    textAlign: 'center',
-  },
-}));
-
-const ResetButtonStyled = styled(Button)(({ theme }) => ({
-  marginLeft: theme.spacing(4.5),
-  [theme.breakpoints.down('sm')]: {
-    width: '100%',
-    marginLeft: 0,
-    textAlign: 'center',
-    marginTop: theme.spacing(4),
-  },
-}));
-
+import { TextField } from '@mui/material';
 const TabAccount = () => {
   // ** State
-  const [openAlert, setOpenAlert] = useState(true);
-  const [imgSrc, setImgSrc] = useState('/images/avatars/1.png');
   const [profile, setProfile] = useState(null);
 
   const { userData } = useContext(AuthContext);
@@ -60,7 +33,7 @@ const TabAccount = () => {
         { platform_name: 'LinkedIn', link: data.linkedin },
       ].filter((data) => data.link);
       console.log(data);
-      const res = await updateUserProfile({
+      await updateUserProfile({
         username: userData.username,
         ...data,
         social_media_links,
@@ -219,128 +192,6 @@ const TabAccount = () => {
                   class_name="col-6"
                   defaultValue={profile?.twitter}
                   label={'Twitter id Link'}
-                />
-              </div>
-              <h3 className="mt-2 mb-2">Skills</h3>
-              <div className="row mt-3">
-                <ArrayInput
-                  name="skills"
-                  control={control}
-                  errors={errors}
-                  register={register}
-                  defaultValue={userData.skills}
-                  class_name="col-12"
-                  label={'Work Experience'}
-                  formFields={[
-                    { name: 'name', type: 'text', label: 'Name', className: 'col-6' },
-                    {
-                      name: 'proficiency',
-                      className: 'col-6',
-                      type: 'select',
-                      label: 'Proficiency',
-                      options: ['Beginner', 'Intermediate', 'Advanced', 'Expert'],
-                    },
-                    {
-                      name: 'description',
-                      type: 'textarea',
-                      label: 'Description',
-                      className: 'col-12',
-                    },
-                  ]}
-                />
-              </div>
-
-              <h3 className="mt-2 mb-2">Academics</h3>
-              <div className="row mt-3">
-                <ArrayInput
-                  name="academic_histories"
-                  control={control}
-                  errors={errors}
-                  register={register}
-                  class_name="col-12"
-                  label={'Academic Histories'}
-                  formFields={[
-                    {
-                      name: 'institution_name',
-                      type: 'text',
-                      label: 'Institution Name',
-                      className: 'col-6',
-                    },
-                    {
-                      name: 'concentration',
-                      className: 'col-6',
-                      type: 'text',
-                      label: 'Concentration',
-                    },
-                    {
-                      name: 'degree_name',
-                      type: 'text',
-                      label: 'Degree',
-                      className: 'col-6',
-                    },
-                    {
-                      name: 'result',
-                      type: 'text',
-                      label: 'Result',
-                      className: 'col-6',
-                    },
-                    {
-                      name: 'start_date',
-                      type: 'date',
-                      label: 'Start Date',
-                      className: 'col-6',
-                    },
-                    {
-                      name: 'graduation_date',
-                      type: 'date',
-                      label: 'Graduation Date',
-                      className: 'col-6',
-                    },
-                  ]}
-                />
-              </div>
-
-              <h3 className="mt-2 mb-2">Work Experience</h3>
-              <div className="row mt-3">
-                <ArrayInput
-                  name="work_experiences"
-                  control={control}
-                  errors={errors}
-                  register={register}
-                  class_name="col-12"
-                  label={'Work Experience'}
-                  formFields={[
-                    {
-                      name: 'company_name',
-                      type: 'text',
-                      label: 'Company Name',
-                      className: 'col-6',
-                    },
-                    {
-                      name: 'branch',
-                      className: 'col-6',
-                      type: 'text',
-                      label: 'Branch',
-                    },
-                    {
-                      name: 'position',
-                      type: 'text',
-                      label: 'Position',
-                      className: 'col-6',
-                    },
-                    {
-                      name: 'starting_date',
-                      type: 'date',
-                      label: 'Starting Date',
-                      className: 'col-6',
-                    },
-                    {
-                      name: 'ending_date',
-                      type: 'date',
-                      label: 'Ending Date',
-                      className: 'col-6',
-                    },
-                  ]}
                 />
               </div>
 

@@ -11,6 +11,7 @@ export default function FormModalButton({
   setOpen,
   children,
   className = '',
+  maxWidth = 'md',
 }) {
   const handleClickOpen = () => {
     setOpen(true);
@@ -22,10 +23,10 @@ export default function FormModalButton({
 
   return (
     <div className={className}>
-      <Button variant="outlined" onClick={handleClickOpen}>
+      <Button variant="contained" onClick={handleClickOpen}>
         {buttonTitle}
       </Button>
-      <Dialog open={open} onClose={handleClose}>
+      <Dialog open={open} onClose={handleClose} maxWidth={maxWidth}>
         <DialogTitle>{heading}</DialogTitle>
         <DialogContent>{children}</DialogContent>
       </Dialog>

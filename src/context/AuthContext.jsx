@@ -1,4 +1,4 @@
-import { responsiveFontSizes } from '@mui/material';
+import { CircularProgress, responsiveFontSizes } from '@mui/material';
 import React, { createContext, useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { STORAGE_KEY_ACCESS_TOKEN, STORAGE_KEY_REFRESH_TOKEN } from 'src/constants/localstorage';
@@ -37,6 +37,16 @@ export const AuthContextProvider = ({ children }) => {
   useEffect(() => {
     initialize();
   }, [initialize]);
+
+  const fetchUser = useCallback(async () => {
+    try {
+      const data = await getUserDetails();
+      setUserData(data);
+    } catch (error) {
+    } finally {
+      setIsFetchingUserData(false);
+    }
+  }, []);
 
   const handleSuccess = useCallback(
     (data) => {
@@ -100,6 +110,7 @@ export const AuthContextProvider = ({ children }) => {
         isFetchingUserData,
         userData,
         setUserData,
+        fetchUser,
         getToken,
         loginToAccount,
         // updateProfile,
