@@ -6,7 +6,7 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import { AuthContext } from 'src/context/AuthContext';
 import FormModalButton from '../tables/FormModalButton';
-import { FormBuilder, Input, Select, Textarea } from '../forms/FormBuilder';
+import { FormBuilder, Input } from '../forms/FormBuilder';
 import { createExperience, deleteExperience, updateExperience } from 'src/services/query/user';
 import { toast } from 'react-toastify';
 
@@ -50,7 +50,7 @@ const WorkExperience = ({ setLoading }) => {
           setOpen={setOpen}
           buttonTitle="+ New Work Experience"
           heading="Add New Work Experience"
-          maxWidth="xl"
+          maxWidth="lg"
         >
           <FormBuilder onSubmit={handleSubmit}>
             {(register, errors, { control, setValue }) => {
@@ -86,6 +86,9 @@ const WorkExperience = ({ setLoading }) => {
                   <Input
                     name="starting_date"
                     type="date"
+                    InputProps={{
+                      shrink: true,
+                    }}
                     errors={errors}
                     required={true}
                     register={register}
@@ -96,6 +99,9 @@ const WorkExperience = ({ setLoading }) => {
                   <Input
                     name="ending_date"
                     type="date"
+                    InputProps={{
+                      shrink: true,
+                    }}
                     errors={errors}
                     required={true}
                     register={register}

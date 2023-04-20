@@ -19,6 +19,15 @@ export const getUsers = async (data) => {
   }
 };
 
+export const getUserDetailByUsername = async (username) => {
+  try {
+    const response = await privateAxios.get(`${endpoints.PROFILES}${username}/`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const register = async (data) => {
   return await axios.post(endpoints.REGISTER, {
     ...data,
@@ -80,7 +89,7 @@ export const deleteExperience = async (id) => {
 };
 
 export const updateUserProfile = async (data) => {
-  return await privateAxios.patch(`${endpoints.PROFILES}`, {
+  return await privateAxios.patch(`${endpoints.PROFILE}`, {
     ...data,
   });
 };

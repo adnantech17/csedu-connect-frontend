@@ -52,7 +52,7 @@ const SkillsSection = ({ setLoading }) => {
           setOpen={setOpenSkill}
           buttonTitle="+ New Skill"
           heading="Add New Skill"
-          maxWidth="xl"
+          maxWidth="lg"
         >
           <FormBuilder onSubmit={handleSkillSubmit}>
             {(register, errors, { control, setValue }) => {

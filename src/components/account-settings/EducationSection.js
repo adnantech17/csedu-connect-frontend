@@ -50,7 +50,7 @@ const EducationSection = ({ setLoading }) => {
           setOpen={setOpen}
           buttonTitle="+ New Academic History"
           heading="Add New Academic History"
-          maxWidth="xl"
+          maxWidth="lg"
         >
           <FormBuilder onSubmit={handleSubmit}>
             {(register, errors, { control, setValue }) => {
@@ -95,6 +95,9 @@ const EducationSection = ({ setLoading }) => {
                   <Input
                     name="start_date"
                     type="date"
+                    InputProps={{
+                      shrink: true,
+                    }}
                     errors={errors}
                     required={true}
                     register={register}
@@ -105,6 +108,9 @@ const EducationSection = ({ setLoading }) => {
                   <Input
                     name="graduation_date"
                     type="date"
+                    InputProps={{
+                      shrink: true,
+                    }}
                     errors={errors}
                     required={true}
                     register={register}
