@@ -12,5 +12,9 @@ const endpoints = {
   ACADEMIC: 'accounts/profile/academic-histories/',
   CREATE_EXPERIENCE: 'accounts/profile/create/work-experiences/',
   EXPERIENCE: 'accounts/profile/work-experiences/',
+
+  BLOGS: 'blogs/',
+  BLOG_CREATE: 'blogs/create/',
+  COMMENTS: 'blogs/comments/',
 };
 export default endpoints;
