@@ -11,3 +11,11 @@ export function getShortDetails(content_head, max_len) {
 
   return shortDetails;
 }
+
+export const formatDateTime = (dateStr) => {
+  const date = new Date(dateStr);
+  const formattedDate = date.toLocaleDateString();
+  const formattedTime = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  const formattedDateTime = `${formattedDate} ${formattedTime}`;
+  return formattedDateTime;
+};

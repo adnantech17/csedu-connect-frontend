@@ -27,6 +27,7 @@ import ProfileImg from 'src/assets/images/profile/user-1.jpg';
 import { Col, Row } from 'react-bootstrap';
 import Loader from '../container/Loader';
 import { getUserDetailByUsername } from 'src/services/query/user';
+import './table-pagination.css';
 
 const useStyles = makeStyles({
   table: {
@@ -54,7 +55,7 @@ const useStyles = makeStyles({
 
 const SingleColumnTableWithFilter = ({ columns, fetchData, filterFields }) => {
   const [tableData, setTableData] = useState([]);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(0);
   const [selectedUser, setSelectedUser] = useState(null);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [count, setCount] = useState(0);
@@ -75,8 +76,9 @@ const SingleColumnTableWithFilter = ({ columns, fetchData, filterFields }) => {
   const fetch = async (data) => {
     try {
       setLoading(true);
-      const res = await fetchData({ page_size: rowsPerPage, page: page, ...data });
+      const res = await fetchData({ page_size: rowsPerPage, page: page + 1, ...data });
       setTableData(res.results);
+      setCount(res.count);
     } catch (error) {
       console.log(error);
     } finally {
@@ -86,13 +88,14 @@ const SingleColumnTableWithFilter = ({ columns, fetchData, filterFields }) => {
 
   useEffect(() => {
     fetch();
-  }, []);
+  }, [rowsPerPage, page]);
 
   const handleChangePage = (_, newPage) => {
     setPage(newPage);
   };
 
   const handleChangeRowsPerPage = (event) => {
+    setPage(0);
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(1);
   };
@@ -492,6 +495,7 @@ const SingleColumnTableWithFilter = ({ columns, fetchData, filterFields }) => {
           page={page}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
+          className="table-pagination"
         />
       </Loader>
     </TableContainer>

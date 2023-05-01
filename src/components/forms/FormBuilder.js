@@ -115,6 +115,47 @@ export const DateInput = ({
   );
 };
 
+export const DateTimeInput = ({
+  prepend,
+  register,
+  name,
+  label,
+  labelClassName,
+  value,
+  class_name,
+  required = false,
+  errors,
+  rules,
+  defaultValue,
+  ...rest
+}) => {
+  const { setValue } = useFormContext();
+  useEffect(() => {
+    setValue(name, defaultValue);
+  }, [defaultValue]);
+
+  return (
+    <div className={`mb-3 ${class_name}`}>
+      <>
+        <div className="d-flex align-items-center input-form">
+          {prepend && <span className="prepend-text text-dark">{prepend}</span>}
+          <TextField
+            InputLabelProps={{
+              shrink: true,
+            }}
+            label={label}
+            type={'datetime-local'}
+            {...register(name, { required })}
+            {...rest}
+            className="form-control"
+          />
+        </div>
+        <InputError error={errors[name]} className={'mt-1'} />
+      </>
+    </div>
+  );
+};
+
 export const FileInput = ({
   prepend,
   register,
@@ -353,7 +394,7 @@ export const InputError = ({ error, text, className }) => {
   return error.type === 'required' ? (
     <div className={className}>
       <span role="alert" className="text-danger">
-        {message || 'This is required'}
+        {text || 'This is required'}
       </span>
     </div>
   ) : null;

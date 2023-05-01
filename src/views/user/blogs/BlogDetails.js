@@ -142,6 +142,10 @@ function BlogDetailsPage() {
                     alt={getFullName(comment.user)}
                     src={comment.user.profile_picture ?? ProfileImg}
                     className={classes.avatar}
+                    sx={{
+                      width: 48,
+                      height: 48,
+                    }}
                   />
                   <Typography variant="subtitle2" color="primary" className={classes.username}>
                     {comment.user.username}

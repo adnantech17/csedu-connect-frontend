@@ -17,5 +17,7 @@ const endpoints = {
   BLOGS: 'blogs/',
   BLOG_CREATE: 'blogs/create/',
   COMMENTS: 'blogs/comments/',
+
+  EVENTS: 'events/',
 };
 export default endpoints;

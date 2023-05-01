@@ -14,11 +14,14 @@ import {
   AccordionSummary,
   AccordionDetails,
   Typography,
+  Box,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import FilterBuilder from './FilterBuilder';
-import Box from '@mui/material/Box';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+
+import './table-pagination.css';
+import Loader from '../container/Loader';
 
 const useStyles = makeStyles({
   table: {
@@ -29,30 +32,34 @@ const useStyles = makeStyles({
   },
 });
 
-const TableWithFilter = ({ columns, fetchData, filterFields }) => {
+const TableWithFilter = ({ columns, fetchData, filterFields, forceReload = false }) => {
   const [tableData, setTableData] = useState([]);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [count, setCount] = useState(0);
+  const [loading, setLoading] = useState(false);
   const classes = useStyles();
 
   const handleFilterSubmit = (data) => {
-    console.log(data);
     fetch(data);
   };
 
   const fetch = async (data) => {
     try {
-      const res = await fetchData({ page_size: rowsPerPage, page: page, ...data });
+      setLoading(true);
+      const res = await fetchData({ page_size: rowsPerPage, page: page + 1, ...data });
       setTableData(res.results);
+      setCount(res.count);
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
     fetch();
-  }, []);
+  }, [rowsPerPage, page, forceReload]);
 
   const handleChangePage = (_, newPage) => {
     setPage(newPage);
@@ -65,49 +72,56 @@ const TableWithFilter = ({ columns, fetchData, filterFields }) => {
 
   return (
     <TableContainer component={Paper}>
-      <Accordion>
-        <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="filters" id="filters">
-          <Typography>Filters</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          {filterFields && (
-            <FilterBuilder filterFields={filterFields} handleFilterSubmit={handleFilterSubmit} />
-          )}
-        </AccordionDetails>
-      </Accordion>
-      <Card>
-        <CardContent>
-          <Table className={classes.table}>
-            <TableHead>
-              <TableRow>
-                {columns.map((column) => (
-                  <TableCell key={column.id}>{column.label}</TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {tableData.map((row, index) => (
-                <TableRow key={row.id} className={index % 2 === 0 ? classes.evenRow : ''}>
+      <Loader isLoading={loading}>
+        <Accordion>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="filters" id="filters">
+            <Typography>Filters</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            {filterFields && (
+              <FilterBuilder filterFields={filterFields} handleFilterSubmit={handleFilterSubmit} />
+            )}
+          </AccordionDetails>
+        </Accordion>
+        <Card>
+          <CardContent>
+            <Table className={classes.table}>
+              <TableHead>
+                <TableRow>
                   {columns.map((column) => (
-                    <TableCell className="text-center" key={column.id}>
-                      {row[column.id] || '-'}
-                    </TableCell>
+                    <TableCell key={column.id}>{column.label}</TableCell>
                   ))}
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
-      <TablePagination
-        rowsPerPageOptions={[10, 20, 50]}
-        component="div"
-        count={count}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      />
+              </TableHead>
+              <TableBody>
+                {tableData.map((row, index) => (
+                  <TableRow key={row.id} className={index % 2 === 0 ? classes.evenRow : ''}>
+                    {columns.map((column) => (
+                      <TableCell className="" key={column.id}>
+                        {column.render ? column.render(row[column.id]) : row[column.id] || '-'}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+
+            <Box paddingRight={10}>
+              <TablePagination
+                rowsPerPageOptions={[10, 20, 50]}
+                component="p"
+                count={count}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+                style={{ margin: '16px auto 0' }}
+                className="table-pagination"
+              />
+            </Box>
+          </CardContent>
+        </Card>
+      </Loader>
     </TableContainer>
   );
 };
