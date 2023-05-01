@@ -1,4 +1,5 @@
-import { Button, MenuItem, TextField } from '@mui/material';
+import { Button, Checkbox, FormControlLabel, FormLabel, MenuItem, TextField } from '@mui/material';
+import { Editor } from '@tinymce/tinymce-react';
 import React, { useEffect } from 'react';
 import { Controller, FormProvider, useFieldArray, useForm, useFormContext } from 'react-hook-form';
 
@@ -73,84 +74,124 @@ export const Input = ({
   );
 };
 
-export const ArrayInput = ({
+export const DateInput = ({
   prepend,
   register,
   name,
   label,
   labelClassName,
   value,
-  type = 'text',
-  pattern,
   class_name,
   required = false,
   errors,
   rules,
   defaultValue,
-  control,
-  formFields = [],
   ...rest
 }) => {
   const { setValue } = useFormContext();
   useEffect(() => {
     setValue(name, defaultValue);
   }, [defaultValue]);
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: name,
-  });
 
   return (
     <div className={`mb-3 ${class_name}`}>
       <>
-        {fields.map((field, index) => (
-          <div className="d-flex align-items-start">
-            <div key={field.id} className="row w-100">
-              {formFields.map((meta) => (
-                <div className={meta.className + ' p-2'}>
-                  <Controller
-                    name={`${name}[${index}].${meta.name}`}
-                    control={control}
-                    defaultValue={field[meta.name]}
-                    rules={{ required }}
-                    key={meta.name}
-                    render={({ field }) => (
-                      <TextField
-                        {...field}
-                        select={meta.type === 'select'}
-                        fullWidth
-                        type={meta.type}
-                        label={meta.label}
-                        InputLabelProps={
-                          meta.type === 'date'
-                            ? {
-                                shrink: true,
-                              }
-                            : {}
-                        }
-                        multiline={meta.type === 'textarea'}
-                        rows={2}
-                      >
-                        {meta.type === 'select' &&
-                          meta.options.map((option) => (
-                            <MenuItem key={option.value} value={option}>
-                              {option}
-                            </MenuItem>
-                          ))}
-                      </TextField>
-                    )}
-                  />
-                </div>
-              ))}
-            </div>
-            <Button className="mt-3 ms-2 me-2" onClick={() => remove(index)}>
-              Delete
-            </Button>
-          </div>
-        ))}
-        <Button onClick={() => append({})}>Add More</Button>
+        <div className="d-flex align-items-center input-form">
+          {prepend && <span className="prepend-text text-dark">{prepend}</span>}
+          <TextField
+            InputLabelProps={{
+              shrink: true,
+            }}
+            label={label}
+            type={'date'}
+            {...register(name, { required })}
+            {...rest}
+            className="form-control"
+          />
+        </div>
         <InputError error={errors[name]} className={'mt-1'} />
       </>
+    </div>
+  );
+};
+
+export const FileInput = ({
+  prepend,
+  register,
+  name,
+  label,
+  labelClassName,
+  value,
+  class_name,
+  required = false,
+  errors,
+  rules,
+  defaultValue,
+  ...rest
+}) => {
+  const { setValue } = useFormContext();
+  useEffect(() => {
+    setValue(name, defaultValue);
+  }, [defaultValue]);
+
+  return (
+    <div className={`mb-3 ${class_name}`}>
+      <>
+        <div className="d-flex align-items-center input-form">
+          {prepend && <span className="prepend-text text-dark">{prepend}</span>}
+          <TextField
+            InputLabelProps={{
+              shrink: true,
+            }}
+            label={label}
+            inputProps={{ accept: 'image/*' }}
+            type={'file'}
+            {...register(name, { required })}
+            {...rest}
+            className="form-control"
+          />
+        </div>
+        <InputError error={errors[name]} className={'mt-1'} />
+      </>
+    </div>
+  );
+};
+
+export const CheckboxInput = ({
+  name,
+  label,
+  labelClassName,
+  value,
+  required = false,
+  errors,
+  register,
+  rules,
+  defaultValue,
+  ...rest
+}) => {
+  const { setValue } = useFormContext();
+  useEffect(() => {
+    setValue(name, defaultValue);
+  }, [defaultValue]);
+
+  return (
+    <div className={`mb-3`}>
+      {/* <FormControlLabel
+        control={<Checkbox {...rest} name={name} color="primary" />}
+        label={label}
+      /> */}
+      <div className="d-flex">
+        <Checkbox
+          label={label}
+          {...register(name, { required })}
+          {...rest}
+          style={{ width: '32px', padding: 0 }}
+          className="form-control"
+          defaultChecked={defaultValue}
+        />
+        <FormLabel>{label}</FormLabel>
+      </div>
+      <InputError error={errors[name]} className={'mt-1'} />
     </div>
   );
 };
@@ -237,7 +278,67 @@ export function Select({
   );
 }
 
-export const InputError = ({ error, message, className }) => {
+export function RichTextEditor({
+  name,
+  label,
+  required = false,
+  errors,
+  control,
+  class_name,
+  options,
+  rules,
+  defaultValue,
+  ...rest
+}) {
+  const { setValue } = useFormContext();
+  useEffect(() => {
+    if (!defaultValue) return;
+    setValue(name, defaultValue);
+  }, [defaultValue]);
+
+  return (
+    <div className={`mb-3 ${class_name}`}>
+      <>
+        <div className="d-flex input-form">
+          <Controller
+            name={name}
+            control={control}
+            rules={rules}
+            render={({ field: { onChange, onBlur, value, ref } }) => (
+              <div className="w-100">
+                <label>{label}</label>
+                <Editor
+                  apiKey="YOUR_API_KEY"
+                  value={value}
+                  init={{
+                    height: 500,
+                    menubar: true,
+                    plugins: [
+                      'advlist autolink lists link image',
+                      'charmap print preview anchor help',
+                      'searchreplace visualblocks code',
+                      'insertdatetime media table paste wordcount',
+                    ],
+                    toolbar:
+                      'undo redo | formatselect | bold italic | \
+                alignleft aligncenter alignright | \
+                bullist numlist outdent indent | help',
+                  }}
+                  onEditorChange={(content) => {
+                    onChange(content);
+                  }}
+                />
+              </div>
+            )}
+          />
+        </div>
+        <InputError error={errors[name]} className={'mt-1'} />
+      </>
+    </div>
+  );
+}
+
+export const InputError = ({ error, text, className }) => {
   if (!error) return null;
 
   if (error.type === 'validate')

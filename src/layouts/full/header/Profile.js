@@ -17,7 +17,7 @@ import { AuthContext } from 'src/context/AuthContext';
 
 const Profile = () => {
   const [anchorEl2, setAnchorEl2] = useState(null);
-  const { logoutUser } = useContext(AuthContext);
+  const { logoutUser, userData } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleClick2 = (event) => {
@@ -54,8 +54,8 @@ const Profile = () => {
         onClick={handleClick2}
       >
         <Avatar
-          src={ProfileImg}
-          alt={ProfileImg}
+          src={userData?.profile_picture || ProfileImg}
+          alt={userData?.profile_picture || ProfileImg}
           sx={{
             width: 35,
             height: 35,

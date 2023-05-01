@@ -6,7 +6,7 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import { AuthContext } from 'src/context/AuthContext';
 import FormModalButton from '../tables/FormModalButton';
-import { FormBuilder, Input } from '../forms/FormBuilder';
+import { CheckboxInput, DateInput, FormBuilder, Input } from '../forms/FormBuilder';
 import { createAcademic, deleteAcademic, updateAcademic } from 'src/services/query/user';
 import { toast } from 'react-toastify';
 
@@ -92,12 +92,8 @@ const EducationSection = ({ setLoading }) => {
                     class_name="col-12 mt-2"
                     label={'Concentration'}
                   />
-                  <Input
+                  <DateInput
                     name="start_date"
-                    type="date"
-                    InputProps={{
-                      shrink: true,
-                    }}
                     errors={errors}
                     required={true}
                     register={register}
@@ -105,18 +101,20 @@ const EducationSection = ({ setLoading }) => {
                     class_name="col-12 mt-2"
                     label={'Start Date'}
                   />
-                  <Input
+                  <DateInput
                     name="graduation_date"
-                    type="date"
-                    InputProps={{
-                      shrink: true,
-                    }}
                     errors={errors}
-                    required={true}
                     register={register}
                     defaultValue={academic?.graduation_date}
                     class_name="col-12 mt-2"
                     label={'Graduation Date'}
+                  />
+                  <CheckboxInput
+                    register={register}
+                    errors={errors}
+                    defaultValue={academic?.is_currently_studying}
+                    name="is_currently_studying"
+                    label={'I currently study here'}
                   />
 
                   <Button className="text-right" type="submit" variant="contained" color="primary">
