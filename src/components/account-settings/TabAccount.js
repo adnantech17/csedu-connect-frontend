@@ -4,11 +4,13 @@ import { useContext, useEffect, useState } from 'react';
 // ** MUI Imports
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
-import { ArrayInput, FormBuilder, Input, Select } from '../forms/FormBuilder';
+import { DateInput, FileInput, FormBuilder, Input, Select } from '../forms/FormBuilder';
 import { AuthContext } from 'src/context/AuthContext';
 import { updateUserProfile } from 'src/services/query/user';
 import { toast } from 'react-toastify';
-import { TextField } from '@mui/material';
+import { Avatar, TextField } from '@mui/material';
+import ProfileImg from 'src/assets/images/profile/user-1.jpg';
+import { uploadImage } from 'src/services/query/image';
 const TabAccount = () => {
   // ** State
   const [profile, setProfile] = useState(null);
@@ -32,10 +34,11 @@ const TabAccount = () => {
         { platform_name: 'Twitter', link: data.twitter },
         { platform_name: 'LinkedIn', link: data.linkedin },
       ].filter((data) => data.link);
-      console.log(data);
+      const imageUrl = await uploadImage(data.image?.[0]);
       await updateUserProfile({
         username: userData.username,
         ...data,
+        profile_picture: imageUrl || userData.profile_picture,
         social_media_links,
         present_address: {
           city: data.present_city,
@@ -56,6 +59,25 @@ const TabAccount = () => {
           return (
             <>
               <h3>Basic Informations</h3>
+              <div className="d-flex flex-column align-items-center">
+                <Avatar
+                  src={userData?.profile_picture || ProfileImg}
+                  alt={userData?.profile_picture || ProfileImg}
+                  sx={{
+                    width: 128,
+                    height: 128,
+                    marginBottom: 2,
+                  }}
+                />
+                <FileInput
+                  name="image"
+                  defaultValue={userData?.image}
+                  errors={errors}
+                  register={register}
+                  label={'Image'}
+                />
+              </div>
+
               <div className="row mt-3">
                 <Input
                   name="first_name"
@@ -101,7 +123,6 @@ const TabAccount = () => {
                   defaultValue={userData?.phone_number}
                   name="phone_number"
                   errors={errors}
-                  required={true}
                   register={register}
                   class_name="col-6"
                   label={'Phone Number'}
@@ -110,23 +131,18 @@ const TabAccount = () => {
                   defaultValue={userData?.registration_number}
                   name="registration_number"
                   errors={errors}
-                  required={true}
                   register={register}
                   class_name="col-6"
                   label={'Registration Number'}
                 />
               </div>
               <div className="row mt-3">
-                <Input
+                <DateInput
                   defaultValue={userData?.date_of_birth}
-                  type="date"
                   name="date_of_birth"
                   errors={errors}
                   required={true}
                   register={register}
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
                   class_name="col-6"
                   label={'Date of Birth'}
                 />

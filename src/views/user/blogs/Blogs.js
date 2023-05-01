@@ -3,7 +3,7 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { useEffect, useState } from 'react';
 import Loader from 'src/components/container/Loader';
-import { FormBuilder, Input, Textarea } from 'src/components/forms/FormBuilder';
+import { FormBuilder, Input, RichTextEditor, Textarea } from 'src/components/forms/FormBuilder';
 import BlogPostCard from 'src/components/shared/BlogPostCard';
 import FormModalButton from 'src/components/tables/FormModalButton';
 import { createBlog, getBlogs } from 'src/services/query/blogs';
@@ -66,11 +66,19 @@ const Blogs = () => {
                     class_name="col-12"
                     label={'Blog Title'}
                   />
-                  <Textarea
+                  {/* <Textarea
                     name="content"
                     register={register}
                     errors={errors}
                     required={true}
+                    class_name="col-12"
+                    label={'Blog Description'}
+                  /> */}
+                  <RichTextEditor
+                    control={control}
+                    name="content"
+                    errors={errors}
+                    // required={true}
                     class_name="col-12"
                     label={'Blog Description'}
                   />

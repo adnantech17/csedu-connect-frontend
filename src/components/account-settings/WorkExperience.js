@@ -6,7 +6,7 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import { AuthContext } from 'src/context/AuthContext';
 import FormModalButton from '../tables/FormModalButton';
-import { FormBuilder, Input } from '../forms/FormBuilder';
+import { CheckboxInput, DateInput, FormBuilder, Input } from '../forms/FormBuilder';
 import { createExperience, deleteExperience, updateExperience } from 'src/services/query/user';
 import { toast } from 'react-toastify';
 
@@ -18,6 +18,7 @@ const WorkExperience = ({ setLoading }) => {
   const handleSubmit = async (data) => {
     setLoading(true);
     try {
+      console.log(experience);
       await (experience ? updateExperience : createExperience)({ ...data, id: experience?.id });
       setOpen(false);
       toast.success(`Your Work Experience has been added.`);
@@ -83,12 +84,8 @@ const WorkExperience = ({ setLoading }) => {
                     class_name="col-12 mt-2"
                     label={'Position'}
                   />
-                  <Input
+                  <DateInput
                     name="starting_date"
-                    type="date"
-                    InputProps={{
-                      shrink: true,
-                    }}
                     errors={errors}
                     required={true}
                     register={register}
@@ -96,18 +93,20 @@ const WorkExperience = ({ setLoading }) => {
                     class_name="col-12 mt-2"
                     label={'Start Date'}
                   />
-                  <Input
+                  <DateInput
                     name="ending_date"
-                    type="date"
-                    InputProps={{
-                      shrink: true,
-                    }}
                     errors={errors}
-                    required={true}
                     register={register}
                     defaultValue={experience?.ending_date}
                     class_name="col-12 mt-2"
                     label={'End Date'}
+                  />
+                  <CheckboxInput
+                    register={register}
+                    errors={errors}
+                    defaultValue={experience?.currently_working}
+                    name="currently_working"
+                    label={'I currently work here'}
                   />
 
                   <Button className="text-right" type="submit" variant="contained" color="primary">

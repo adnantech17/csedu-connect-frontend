@@ -8,6 +8,8 @@ import Loader from 'src/components/container/Loader';
 import { getFullName } from 'src/views/utilities/utils';
 import ProfileImg from 'src/assets/images/profile/user-1.jpg';
 import { Card } from 'react-bootstrap';
+import ReactMarkdown from 'react-markdown';
+import rehypeRaw from 'rehype-raw';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -107,9 +109,7 @@ function BlogDetailsPage() {
           </IconButton>
           <Typography variant="body2">{blog?.comments_count}</Typography>
         </Box>
-        <Typography className="mt-3" variant="body1" component="div">
-          {blog?.content}
-        </Typography>
+        <ReactMarkdown rehypePlugins={[rehypeRaw]}>{blog?.content}</ReactMarkdown>
 
         <Box className={classes.commentBox}>
           <form onSubmit={handleCommentSubmit} className="d-flex">
