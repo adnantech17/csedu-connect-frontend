@@ -6,7 +6,7 @@ import Loader from 'src/components/container/Loader';
 import { FormBuilder, Input, Textarea } from 'src/components/forms/FormBuilder';
 import BlogPostCard from 'src/components/shared/BlogPostCard';
 import FormModalButton from 'src/components/tables/FormModalButton';
-import { createBlog, getBlogs } from 'src/services/query/blogs';
+import { createBlog, deleteBlog, getBlogs } from 'src/services/query/blogs';
 import { getFullName, getShortDetails } from 'src/views/utilities/utils';
 
 const Blogs = () => {
@@ -39,12 +39,24 @@ const Blogs = () => {
       setLoading(false);
     }
   };
+  const handleDelete = async (id) => {
+    setLoading(true);
+    try {
+      await deleteBlog(id);
+      const res = await getBlogs({});
+      setBlogs(res);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     getAllBlogs();
   }, []);
   return (
-    <>
+    <Loader isLoading={loading}>
       <FormModalButton
         className="d-flex m-3 justify-content-end"
         buttonTitle="+ New Blog"
@@ -84,24 +96,23 @@ const Blogs = () => {
         </FormBuilder>
       </FormModalButton>
       <Grid container spacing={6}>
-        <Loader isLoading={loading}>
-          <Grid item xs={12} sx={{ paddingBottom: 4 }}>
-            <Typography variant="h5">Blogs</Typography>
+        <Grid item xs={12} sx={{ paddingBottom: 4 }}>
+          <Typography variant="h5">Blogs</Typography>
+        </Grid>
+        {blogs?.map((blog) => (
+          <Grid item xs={12} sm={12} md={4}>
+            <BlogPostCard
+              handleDelete={handleDelete}
+              id={blog.id}
+              title={blog.title}
+              author={getFullName(blog.user)}
+              short_details={getShortDetails(blog.content_head, 150)}
+              image="https://images.unsplash.com/photo-1521295121783-8a321d551ad2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8Z2xvYmFsfGVufDB8fDB8fA%3D%3D&w=1000&q=80"
+            />
           </Grid>
-          {blogs?.map((blog) => (
-            <Grid item xs={12} sm={12} md={4}>
-              <BlogPostCard
-                id={blog.id}
-                title={blog.title}
-                author={getFullName(blog.user)}
-                short_details={getShortDetails(blog.content_head, 150)}
-                image="https://images.unsplash.com/photo-1521295121783-8a321d551ad2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8Z2xvYmFsfGVufDB8fDB8fA%3D%3D&w=1000&q=80"
-              />
-            </Grid>
-          ))}
-        </Loader>
+        ))}
       </Grid>
-    </>
+    </Loader>
   );
 };
 

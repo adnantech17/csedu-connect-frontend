@@ -1,183 +1,87 @@
 // ** React Imports
-import { useState } from 'react'
+import { useState } from 'react';
 
 // ** MUI Imports
-import Box from '@mui/material/Box'
-import Grid from '@mui/material/Grid'
-import Avatar from '@mui/material/Avatar'
-import Button from '@mui/material/Button'
-import Divider from '@mui/material/Divider'
-import InputLabel from '@mui/material/InputLabel'
-import IconButton from '@mui/material/IconButton'
-import Typography from '@mui/material/Typography'
-import CardContent from '@mui/material/CardContent'
-import FormControl from '@mui/material/FormControl'
-import OutlinedInput from '@mui/material/OutlinedInput'
-import InputAdornment from '@mui/material/InputAdornment'
-import { IconEye, IconEyeOff } from '@tabler/icons'
-import { KeyOutlined, LockOpenOutlined } from '@mui/icons-material'
+import Button from '@mui/material/Button';
+import { FormBuilder, Input } from '../forms/FormBuilder';
+import { CardContent, Grid } from '@mui/material';
+import { changePassword } from 'src/services/query/user';
+import { toast } from 'react-toastify';
 
 const TabSecurity = () => {
-  // ** States
-  const [values, setValues] = useState({
-    newPassword: '',
-    currentPassword: '',
-    showNewPassword: false,
-    confirmNewPassword: '',
-    showCurrentPassword: false,
-    showConfirmNewPassword: false
-  })
+  const handleSubmit = async (data) => {
+    try {
+      await changePassword(data);
+      toast.success('Password Updated!');
+    } catch (err) {
+      toast.error('Unable to change password!');
+    }
+  };
 
-  // Handle Current Password
-  const handleCurrentPasswordChange = prop => event => {
-    setValues({ ...values, [prop]: event.target.value })
-  }
-
-  const handleClickShowCurrentPassword = () => {
-    setValues({ ...values, showCurrentPassword: !values.showCurrentPassword })
-  }
-
-  const handleMouseDownCurrentPassword = event => {
-    event.preventDefault()
-  }
-
-  // Handle New Password
-  const handleNewPasswordChange = prop => event => {
-    setValues({ ...values, [prop]: event.target.value })
-  }
-
-  const handleClickShowNewPassword = () => {
-    setValues({ ...values, showNewPassword: !values.showNewPassword })
-  }
-
-  const handleMouseDownNewPassword = event => {
-    event.preventDefault()
-  }
-
-  // Handle Confirm New Password
-  const handleConfirmNewPasswordChange = prop => event => {
-    setValues({ ...values, [prop]: event.target.value })
-  }
-
-  const handleClickShowConfirmNewPassword = () => {
-    setValues({ ...values, showConfirmNewPassword: !values.showConfirmNewPassword })
-  }
-
-  const handleMouseDownConfirmNewPassword = event => {
-    event.preventDefault()
-  }
+  const validatePassword = (getValues) => {
+    const { new_password, confirm_password } = getValues();
+    return new_password === confirm_password || 'The passwords do not match';
+  };
 
   return (
-    <form>
-      <CardContent sx={{ paddingBottom: 0 }}>
-        <Grid container spacing={5}>
-          <Grid item xs={12} sm={6}>
-            <Grid container spacing={5}>
-              <Grid item xs={12} sx={{ marginTop: 4.75 }}>
-                <FormControl fullWidth>
-                  <InputLabel htmlFor='account-settings-current-password'>Current Password</InputLabel>
-                  <OutlinedInput
-                    label='Current Password'
-                    value={values.currentPassword}
-                    id='account-settings-current-password'
-                    type={values.showCurrentPassword ? 'text' : 'password'}
-                    onChange={handleCurrentPasswordChange('currentPassword')}
-                    endAdornment={
-                      <InputAdornment position='end'>
-                        <IconButton
-                          edge='end'
-                          aria-label='toggle password visibility'
-                          onClick={handleClickShowCurrentPassword}
-                          onMouseDown={handleMouseDownCurrentPassword}
-                        >
-                          {values.showCurrentPassword ? <IconEye /> : <IconEyeOff />}
-                        </IconButton>
-                      </InputAdornment>
-                    }
-                  />
-                </FormControl>
-              </Grid>
-
-              <Grid item xs={12} >
-                <FormControl fullWidth>
-                  <InputLabel htmlFor='account-settings-new-password'>New Password</InputLabel>
-                  <OutlinedInput
-                    label='New Password'
-                    value={values.newPassword}
-                    id='account-settings-new-password'
-                    onChange={handleNewPasswordChange('newPassword')}
-                    type={values.showNewPassword ? 'text' : 'password'}
-                    endAdornment={
-                      <InputAdornment position='end'>
-                        <IconButton
-                          edge='end'
-                          onClick={handleClickShowNewPassword}
-                          aria-label='toggle password visibility'
-                          onMouseDown={handleMouseDownNewPassword}
-                        >
-                          {values.showNewPassword ? <IconEye /> : <IconEyeOff />}
-                        </IconButton>
-                      </InputAdornment>
-                    }
-                  />
-                </FormControl>
-              </Grid>
-
-              <Grid item xs={12}>
-                <FormControl fullWidth>
-                  <InputLabel htmlFor='account-settings-confirm-new-password'>Confirm New Password</InputLabel>
-                  <OutlinedInput
-                    label='Confirm New Password'
-                    value={values.confirmNewPassword}
-                    id='account-settings-confirm-new-password'
-                    type={values.showConfirmNewPassword ? 'text' : 'password'}
-                    onChange={handleConfirmNewPasswordChange('confirmNewPassword')}
-                    endAdornment={
-                      <InputAdornment position='end'>
-                        <IconButton
-                          edge='end'
-                          aria-label='toggle password visibility'
-                          onClick={handleClickShowConfirmNewPassword}
-                          onMouseDown={handleMouseDownConfirmNewPassword}
-                        >
-                          {values.showConfirmNewPassword ? <IconEye /> : <IconEyeOff />}
-                        </IconButton>
-                      </InputAdornment>
-                    }
-                  />
-                </FormControl>
-              </Grid>
+    <CardContent sx={{ paddingBottom: 0 }}>
+      <Grid container spacing={5}>
+        <Grid item xs={12} sm={12}>
+          <Grid container spacing={5}>
+            <Grid item xs={12} sx={{ marginTop: 4.75 }}>
+              <FormBuilder onSubmit={handleSubmit}>
+                {(register, errors, { control, getValues }) => {
+                  return (
+                    <div
+                      className="row"
+                      style={{ maxWidth: '400px', width: '100%', margin: 'auto' }}
+                    >
+                      <Input
+                        name="current_password"
+                        type="password"
+                        errors={errors}
+                        required={true}
+                        register={register}
+                        class_name="col-12 mt-2"
+                        label={'Current Password'}
+                      />
+                      <Input
+                        name="new_password"
+                        type="password"
+                        errors={errors}
+                        required={true}
+                        register={register}
+                        class_name="col-12 mt-2"
+                        label={'New Password'}
+                      />
+                      <Input
+                        name="confirm_password"
+                        type="password"
+                        errors={errors}
+                        required={true}
+                        register={register}
+                        class_name="col-12 mt-2"
+                        label={'Confirm Password'}
+                        validate={() => validatePassword(getValues)}
+                      />
+                      <Button
+                        className="text-right"
+                        type="submit"
+                        variant="contained"
+                        color="primary"
+                      >
+                        Submit
+                      </Button>
+                    </div>
+                  );
+                }}
+              </FormBuilder>
             </Grid>
           </Grid>
-
-          <Grid
-            item
-            sm={6}
-            xs={12}
-            sx={{ display: 'flex', marginTop: [7.5, 2.5], alignItems: 'center', justifyContent: 'center' }}
-          >
-            <img width={183} alt='avatar' height={256} src='/images/pages/pose-m-1.png' />
-          </Grid>
         </Grid>
-      </CardContent>
+      </Grid>
+    </CardContent>
+  );
+};
 
-      <CardContent>
-        <Box sx={{ mt: 11 }}>
-          <Button variant='contained' sx={{ marginRight: 3.5 }}>
-            Save Changes
-          </Button>
-          <Button
-            type='reset'
-            variant='outlined'
-            color='secondary'
-            onClick={() => setValues({ ...values, currentPassword: '', newPassword: '', confirmNewPassword: '' })}
-          >
-            Reset
-          </Button>
-        </Box>
-      </CardContent>
-    </form>
-  )
-}
-
-export default TabSecurity
+export default TabSecurity;

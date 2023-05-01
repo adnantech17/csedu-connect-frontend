@@ -44,6 +44,7 @@ export const Input = ({
   required = false,
   errors,
   rules,
+  validate = () => {},
   defaultValue,
   ...rest
 }) => {
@@ -60,7 +61,7 @@ export const Input = ({
           <TextField
             label={label}
             type={type}
-            {...register(name, { required })}
+            {...register(name, { required, validate: validate })}
             {...rest}
             className="form-control"
             pattern={pattern}
@@ -236,13 +237,22 @@ export function Select({
   );
 }
 
-export const InputError = ({ error, text, className }) => {
+export const InputError = ({ error, message, className }) => {
   if (!error) return null;
+
+  if (error.type === 'validate')
+    return (
+      <div className={className}>
+        <span role="alert" className="text-danger">
+          {error.message || 'Error'}
+        </span>
+      </div>
+    );
 
   return error.type === 'required' ? (
     <div className={className}>
       <span role="alert" className="text-danger">
-        {text || 'This is required'}
+        {message || 'This is required'}
       </span>
     </div>
   ) : null;

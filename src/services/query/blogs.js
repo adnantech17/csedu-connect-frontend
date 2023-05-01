@@ -24,8 +24,21 @@ export const createComment = async (data) => {
     ...data,
   });
 };
+
+export const likeBlog = async (id) => {
+  return await privateAxios.post(`${endpoints.BLOGS}${id}/like/`);
+};
+
+export const unlikeBlog = async (id) => {
+  return await privateAxios.delete(`${endpoints.BLOGS}${id}/like/`);
+};
+
 export const createBlog = async (data) => {
   return await privateAxios.post(endpoints.BLOG_CREATE, {
     ...data,
   });
+};
+
+export const deleteBlog = async (id) => {
+  return await privateAxios.delete(`${endpoints.BLOGS}${id}/`);
 };

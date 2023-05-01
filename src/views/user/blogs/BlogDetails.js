@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@mui/styles';
 import { Avatar, Box, Button, Container, IconButton, Input, Typography } from '@mui/material';
 import { Comment, Favorite, FavoriteBorder } from '@mui/icons-material';
-import { createComment, getBlogDetails } from 'src/services/query/blogs';
+import { createComment, getBlogDetails, likeBlog, unlikeBlog } from 'src/services/query/blogs';
 import { useParams } from 'react-router';
 import Loader from 'src/components/container/Loader';
 import { getFullName } from 'src/views/utilities/utils';
@@ -66,11 +66,19 @@ function BlogDetailsPage() {
     getBlogDetailsAsync();
   }, []);
 
-  const [liked, setLiked] = useState(false);
   const [commentText, setCommentText] = useState('');
 
-  const handleLikeClick = () => {
-    setLiked(!liked);
+  const handleLikeClick = async () => {
+    setLoading(true);
+    try {
+      await (blog.is_liked ? unlikeBlog : likeBlog)(id);
+      const res = await getBlogDetails(id);
+      setBlog(res);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleCommentSubmit = async (event) => {
@@ -99,7 +107,7 @@ function BlogDetailsPage() {
         </Typography>
         <Box display="flex" alignItems="center">
           <IconButton className={classes.likeButton} onClick={handleLikeClick}>
-            {liked ? <Favorite /> : <FavoriteBorder />}
+            {blog?.is_liked ? <Favorite /> : <FavoriteBorder />}
           </IconButton>
           <Typography variant="body2">{blog?.likes_count}</Typography>
           <IconButton className={classes.commentButton}>

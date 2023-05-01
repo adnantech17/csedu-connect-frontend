@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography';
 import CardContent from '@mui/material/CardContent';
 import { useNavigate } from 'react-router';
 
-const BlogPostCard = ({ title, author, short_details, image, id }) => {
+const BlogPostCard = ({ title, author, short_details, image, id, handleDelete }) => {
   const navigate = useNavigate();
   return (
     <Card>
@@ -21,7 +21,7 @@ const BlogPostCard = ({ title, author, short_details, image, id }) => {
       <Button sx={{ margin: 2 }} onClick={() => navigate(`/blogs-list/${id}`)}>
         Read More
       </Button>
-      <Button sx={{ margin: 2 }} variant="contained" color="error">
+      <Button sx={{ margin: 2 }} variant="contained" color="error" onClick={() => handleDelete(id)}>
         Delete
       </Button>
     </Card>

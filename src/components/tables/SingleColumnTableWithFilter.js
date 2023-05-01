@@ -461,7 +461,7 @@ const SingleColumnTableWithFilter = ({ columns, fetchData, filterFields }) => {
                                 </Typography>
                                 <Typography color="textSecondary">{row.email_address}</Typography>
                                 <Typography variant="body2" component="p">
-                                  From {row.batch_number} Batch
+                                  From {row.batch_number ?? 'Unknown'} Batch
                                 </Typography>
                               </div>
                             </div>

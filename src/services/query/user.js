@@ -40,6 +40,12 @@ export const createReferrals = async (data) => {
   });
 };
 
+export const changePassword = async (data) => {
+  return await privateAxios.put(endpoints.CHANGE_PASS, {
+    ...data,
+  });
+};
+
 export const createSkill = async (data) => {
   return await privateAxios.post(endpoints.CREATE_SKILL, {
     ...data,
