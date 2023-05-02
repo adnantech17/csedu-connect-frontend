@@ -33,8 +33,24 @@ export const unsubscribe = async (id) => {
   return await privateAxios.delete(`${endpoints.EVENTS}${id}/subscribe/`);
 };
 
+export const addManager = async (id, user) => {
+  return await privateAxios.post(`${endpoints.EVENTS}${id}/managers/`, {
+    usernames: [user.username],
+  });
+};
+
+export const deleteManager = async (id, user) => {
+  return await privateAxios.delete(`${endpoints.EVENTS}${id}/managers/${user.username}/`);
+};
+
 export const createEvent = async (data) => {
   return await privateAxios.post(endpoints.EVENTS, {
+    ...data,
+  });
+};
+
+export const updateEvent = async (data) => {
+  return await privateAxios.patch(`${endpoints.EVENTS}${data.id}/`, {
     ...data,
   });
 };

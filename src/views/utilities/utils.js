@@ -1,5 +1,5 @@
 export function getFullName(user) {
-  return `${user.first_name} ${user.last_name}`;
+  return user.first_name ? `${user.first_name} ${user.last_name}` : user.username;
 }
 
 export function getShortDetails(content_head, max_len) {

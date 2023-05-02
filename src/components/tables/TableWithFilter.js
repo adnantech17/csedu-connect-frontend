@@ -98,7 +98,7 @@ const TableWithFilter = ({ columns, fetchData, filterFields, forceReload = false
                   <TableRow key={row.id} className={index % 2 === 0 ? classes.evenRow : ''}>
                     {columns.map((column) => (
                       <TableCell className="" key={column.id}>
-                        {column.render ? column.render(row[column.id]) : row[column.id] || '-'}
+                        {column.render ? column.render(row[column.id], row) : row[column.id] || '-'}
                       </TableCell>
                     ))}
                   </TableRow>

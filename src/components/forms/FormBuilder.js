@@ -131,6 +131,7 @@ export const DateTimeInput = ({
 }) => {
   const { setValue } = useFormContext();
   useEffect(() => {
+    console.log(defaultValue);
     setValue(name, defaultValue);
   }, [defaultValue]);
 
@@ -144,6 +145,7 @@ export const DateTimeInput = ({
               shrink: true,
             }}
             label={label}
+            defaultValue={defaultValue}
             type={'datetime-local'}
             {...register(name, { required })}
             {...rest}
