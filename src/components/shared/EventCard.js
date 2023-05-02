@@ -2,7 +2,6 @@
 import Card from '@mui/material/Card';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
-import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import CardContent from '@mui/material/CardContent';
@@ -60,8 +59,19 @@ const EventCard = ({ event, handleSubscribe }) => {
                 </span>
                 <span>To Join The Event</span>
               </Typography>
-              <Button variant="contained" onClick={() => handleSubscribe(event.id)}>
-                Subscribe
+              <Button
+                variant="contained"
+                onClick={() => handleSubscribe(event.id, event.is_subscriber)}
+                disabled={event?.is_manager}
+              >
+                {event?.is_subscriber ? 'Unsubscribe' : 'Subscribe'}
+              </Button>
+              <Button
+                className="ms-2"
+                variant="contained"
+                onClick={() => handleSubscribe(event.id)}
+              >
+                View
               </Button>
             </Box>
           </CardContent>
