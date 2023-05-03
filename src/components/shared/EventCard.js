@@ -6,8 +6,10 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import CardContent from '@mui/material/CardContent';
 import { formatDateTime } from 'src/views/utilities/utils';
+import { useNavigate } from 'react-router';
 
 const EventCard = ({ event, handleSubscribe }) => {
+  const navigate = useNavigate();
   return (
     <Card className="mb-3">
       <Grid container spacing={6}>
@@ -69,7 +71,7 @@ const EventCard = ({ event, handleSubscribe }) => {
               <Button
                 className="ms-2"
                 variant="contained"
-                onClick={() => handleSubscribe(event.id)}
+                onClick={() => navigate(`/events-list/${event?.id}`)}
               >
                 View
               </Button>

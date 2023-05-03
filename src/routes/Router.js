@@ -11,6 +11,7 @@ import Blogs from 'src/views/user/blogs/Blogs';
 import Profile from 'src/views/dashboard/Profile';
 import AuthGuard from 'src/components/container/AuthGuard';
 import BlogDetailsPage from 'src/views/user/blogs/BlogDetails';
+import EventsDetails from 'src/views/user/events/EventDetails';
 
 /* ***Layouts**** */
 const FullLayout = Loadable(lazy(() => import('../layouts/full/FullLayout')));
@@ -74,6 +75,15 @@ const Router = [
         element: (
           <AuthGuard>
             <Event />
+          </AuthGuard>
+        ),
+      },
+      {
+        path: '/events-list/:id',
+        exact: true,
+        element: (
+          <AuthGuard>
+            <EventsDetails />
           </AuthGuard>
         ),
       },

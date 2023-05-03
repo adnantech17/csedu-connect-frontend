@@ -35,8 +35,6 @@ const useStyles = makeStyles((theme) => ({
     marginTop: 2,
   },
   avatar: {
-    width: 4,
-    height: 4,
     marginRight: 10,
   },
   username: {
@@ -71,7 +69,7 @@ function BlogDetailsPage() {
   const [commentText, setCommentText] = useState('');
 
   const handleLikeClick = async () => {
-    setLoading(true);
+    // setLoading(true);
     try {
       await (blog.is_liked ? unlikeBlog : likeBlog)(id);
       const res = await getBlogDetails(id);
@@ -88,7 +86,7 @@ function BlogDetailsPage() {
     setCommentText('');
     setLoading(true);
     try {
-      createComment({
+      await createComment({
         blog: id,
         content: commentText,
       });
