@@ -28,6 +28,12 @@ export const getUserDetailByUsername = async (username) => {
   }
 };
 
+export const makeAdmin = async (data) => {
+  return await privateAxios.post(endpoints.MANAGE_ADMINS, {
+    ...data,
+  });
+};
+
 export const register = async (data) => {
   return await axios.post(endpoints.REGISTER, {
     ...data,

@@ -19,8 +19,8 @@ export const getEvents = async (data) => {
   }
 };
 
-export const createComment = async (data) => {
-  return await privateAxios.post(endpoints.COMMENTS, {
+export const createAnnouncement = async (data) => {
+  return await privateAxios.post(`${endpoints.EVENTS}${data.event}/announcements/`, {
     ...data,
   });
 };

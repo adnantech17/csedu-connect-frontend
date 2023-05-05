@@ -12,6 +12,7 @@ import Profile from 'src/views/dashboard/Profile';
 import AuthGuard from 'src/components/container/AuthGuard';
 import BlogDetailsPage from 'src/views/user/blogs/BlogDetails';
 import EventsDetails from 'src/views/user/events/EventDetails';
+import StudentDetails from 'src/views/user/students/StudentDetails';
 
 /* ***Layouts**** */
 const FullLayout = Loadable(lazy(() => import('../layouts/full/FullLayout')));
@@ -93,6 +94,15 @@ const Router = [
         element: (
           <AuthGuard>
             <Students />
+          </AuthGuard>
+        ),
+      },
+      {
+        path: '/students-list/:username',
+        exact: true,
+        element: (
+          <AuthGuard>
+            <StudentDetails />
           </AuthGuard>
         ),
       },

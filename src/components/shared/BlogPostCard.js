@@ -5,6 +5,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import CardContent from '@mui/material/CardContent';
 import { useNavigate } from 'react-router';
+import ConfirmationPopup from '../popup/ConfirmationPopup';
 
 const BlogPostCard = ({ title, author, short_details, image, id, handleDelete }) => {
   const navigate = useNavigate();
@@ -21,9 +22,11 @@ const BlogPostCard = ({ title, author, short_details, image, id, handleDelete })
       <Button sx={{ margin: 2 }} onClick={() => navigate(`/blogs-list/${id}`)}>
         Read More
       </Button>
-      <Button sx={{ margin: 2 }} variant="contained" color="error" onClick={() => handleDelete(id)}>
-        Delete
-      </Button>
+      <ConfirmationPopup onConfirm={() => handleDelete(id)}>
+        <Button sx={{ margin: 2 }} variant="contained" color="error">
+          Delete
+        </Button>
+      </ConfirmationPopup>
     </Card>
   );
 };

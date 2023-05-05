@@ -22,11 +22,9 @@ import {
   ThumbUpOffAlt,
 } from '@mui/icons-material';
 import {
-  createComment,
+  createAnnouncement,
   getEventDetails,
-  likeEvent,
   subscribe,
-  unlikeEvent,
   unsubscribe,
 } from 'src/services/query/events';
 import { useParams } from 'react-router';
@@ -78,6 +76,8 @@ function EventsDetails() {
   const [event, setEvent] = useState(null);
   const [loading, setLoading] = useState(false);
   const [value, setValue] = useState('feed');
+  const [showAllGuests, setShowAllGuests] = useState(false);
+  const [commentLoading, setCommentLoading] = useState(false);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -117,18 +117,18 @@ function EventsDetails() {
   const handleCommentSubmit = async (event) => {
     event.preventDefault();
     setCommentText('');
-    setLoading(true);
+    setCommentLoading(true);
     try {
-      createComment({
+      await createAnnouncement({
         event: id,
-        content: commentText,
+        text: commentText,
       });
       const res = await getEventDetails(id);
       setEvent(res);
     } catch (err) {
       console.log(err);
     } finally {
-      setLoading(false);
+      setCommentLoading(false);
     }
   };
 
@@ -215,14 +215,14 @@ function EventsDetails() {
             )}
 
             <Box className={classes.commentList}>
-              {event?.comment?.length ? (
-                event?.comments?.map((comment) => (
+              {event?.announcements?.length ? (
+                event?.announcements?.map((comment) => (
                   <Card className="p-3 m-2">
                     <Box key={comment.id}>
                       <Box display="flex" alignItems="center">
                         <Avatar
-                          alt={getFullName(comment.user)}
-                          src={comment.user.profile_picture ?? ProfileImg}
+                          alt={getFullName(comment.posted_by)}
+                          src={comment.posted_by.profile_picture ?? ProfileImg}
                           className={classes.avatar}
                           sx={{
                             width: 48,
@@ -234,10 +234,10 @@ function EventsDetails() {
                           color="primary"
                           className={classes.username}
                         >
-                          {comment.user.username}
+                          {comment.posted_by.username}
                         </Typography>
                         <Typography variant="body2" className="ms-1">
-                          {comment.content}
+                          {comment.text}
                         </Typography>
                       </Box>
                     </Box>
@@ -276,6 +276,53 @@ function EventsDetails() {
                 </Card>
               ))}
             </Box>
+            <Box className={classes.commentList}>
+              <h4 className="p-2 mt-2">Guests List</h4>
+              {event?.guests?.length === 0 ? (
+                <Typography variant="subtitle2" color="textSecondary" className="p-2 m-2">
+                  No guests
+                </Typography>
+              ) : (
+                <>
+                  {event?.guests
+                    ?.slice(0, showAllGuests ? event.guests.length : 5)
+                    .map((manager) => (
+                      <Card className="p-2 m-2">
+                        <Box key={manager.id}>
+                          <Box display="flex" alignItems="center">
+                            <Avatar
+                              alt={getFullName(manager)}
+                              src={manager.profile_picture ?? ProfileImg}
+                              className={classes.avatar}
+                              sx={{
+                                width: 48,
+                                height: 48,
+                              }}
+                            />
+                            <Typography
+                              variant="subtitle2"
+                              color="primary"
+                              className={classes.username}
+                            >
+                              {getFullName(manager)}
+                              &nbsp;({manager.username})
+                            </Typography>
+                          </Box>
+                        </Box>
+                      </Card>
+                    ))}
+                  {event?.guests?.length > 5 && !showAllGuests && (
+                    <Button
+                      onClick={() => setShowAllGuests(true)}
+                      className={classes.showAllButton}
+                    >
+                      Show All
+                    </Button>
+                  )}
+                </>
+              )}
+            </Box>
+
             <h4 className="p-2 mt-4">Description</h4>
             <ReactMarkdown rehypePlugins={[rehypeRaw]} className="p-2">
               {event?.description}

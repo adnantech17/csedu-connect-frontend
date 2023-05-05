@@ -7,12 +7,13 @@ import CardHeader from '@mui/material/CardHeader';
 import { FormBuilder, Input, Textarea } from 'src/components/forms/FormBuilder';
 import FormModalButton from 'src/components/tables/FormModalButton';
 import TableWithFilter from 'src/components/tables/TableWithFilter';
-import { createReferrals, getUsers } from 'src/services/query/user';
+import { createReferrals, getUsers, makeAdmin } from 'src/services/query/user';
 import { Button, Dialog, DialogContent, DialogTitle, TextField } from '@mui/material';
 import { toast } from 'react-toastify';
 import { useState } from 'react';
 import { adminMailSend } from 'src/services/query/mails';
 import { Add, Send } from '@mui/icons-material';
+import ConfirmationPopup from 'src/components/popup/ConfirmationPopup';
 
 const columns = [
   { id: 'username', label: 'Name' },
@@ -36,6 +37,7 @@ const UsersManagement = () => {
   const [open, setOpen] = useState(false);
   const [emailDialogOpen, setEmailDialogOpen] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState([]);
+  const [forceReload, setForceReload] = useState(false);
 
   const onselectionchange = (users) => {
     setSelectedUsers(users);
@@ -51,6 +53,7 @@ const UsersManagement = () => {
     } finally {
     }
   };
+
   const handleMailSend = async (data) => {
     try {
       const res = await adminMailSend({
@@ -64,6 +67,38 @@ const UsersManagement = () => {
     }
   };
 
+  const handleAdmin = async (username) => {
+    try {
+      const res = await makeAdmin({
+        username: username,
+      });
+      setEmailDialogOpen(false);
+      setForceReload((state) => !state);
+      toast.success('New Admin added.');
+    } catch (error) {
+      toast.error('Error adding new Admin!');
+    }
+  };
+
+  const columns = [
+    { id: 'username', label: 'Name' },
+    { id: 'first_name', label: 'First Name' },
+    { id: 'last_name', label: 'Last Name' },
+    { id: 'email_address', label: 'Email' },
+    { id: 'batch_number', label: 'Batch' },
+    { id: 'company', label: 'Company' },
+    { id: 'country', label: 'Country' },
+    {
+      id: 'admin',
+      label: 'Actions',
+      render: (_, row) =>
+        !row.is_admin && (
+          <ConfirmationPopup onConfirm={() => handleAdmin(row.username)}>
+            <Button>Make Admin</Button>
+          </ConfirmationPopup>
+        ),
+    },
+  ];
   return (
     <Grid container spacing={6}>
       <Grid item xs={12}>
@@ -155,6 +190,7 @@ const UsersManagement = () => {
           </div>
           <CardHeader title="User Management" titleTypographyProps={{ variant: 'h6' }} />
           <TableWithFilter
+            forceReload={forceReload}
             columns={columns}
             filterFields={filterFields}
             fetchData={getUsers}
