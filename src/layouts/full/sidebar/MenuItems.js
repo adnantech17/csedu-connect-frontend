@@ -1,4 +1,10 @@
-import { AccountCircleOutlined, AlternateEmailSharp, CalendarToday, EmailOutlined, Event } from '@mui/icons-material';
+import {
+  AccountCircleOutlined,
+  AlternateEmailSharp,
+  CalendarToday,
+  EmailOutlined,
+  Event,
+} from '@mui/icons-material';
 import { IconWriting } from '@tabler/icons';
 
 import { uniqueId } from 'lodash';
@@ -7,28 +13,33 @@ const Menuitems = [
   {
     navlabel: true,
     subheader: 'Admin Panel',
+    admin: true,
   },
   {
     id: uniqueId(),
     title: 'Users Management',
     icon: AccountCircleOutlined,
     href: '/users-management',
+    admin: true,
   },
   {
     id: uniqueId(),
     title: 'Emails Management',
     icon: EmailOutlined,
     href: '/emails-management',
+    admin: true,
   },
   {
     id: uniqueId(),
     title: 'Events Management',
     icon: Event,
     href: '/events-management',
+    admin: true,
   },
   {
     navlabel: true,
     subheader: 'User Panel',
+    admin: false,
   },
 
   {
@@ -36,24 +47,28 @@ const Menuitems = [
     title: 'Students',
     icon: AccountCircleOutlined,
     href: '/students-list',
+    admin: false,
   },
   {
     id: uniqueId(),
     title: 'Emails',
     icon: AlternateEmailSharp,
     href: '/emails-list',
+    admin: false,
   },
   {
     id: uniqueId(),
     title: 'Events',
     icon: CalendarToday,
     href: '/events-list',
+    admin: false,
   },
   {
     id: uniqueId(),
     title: 'Blogs',
     icon: IconWriting,
     href: '/blogs-list',
+    admin: false,
   },
   // {
   //   navlabel: true,

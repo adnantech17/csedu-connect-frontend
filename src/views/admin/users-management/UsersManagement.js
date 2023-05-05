@@ -4,13 +4,15 @@ import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 
 // ** Demo Components Imports
-import { FormBuilder, Input } from 'src/components/forms/FormBuilder';
+import { FormBuilder, Input, Textarea } from 'src/components/forms/FormBuilder';
 import FormModalButton from 'src/components/tables/FormModalButton';
 import TableWithFilter from 'src/components/tables/TableWithFilter';
 import { createReferrals, getUsers } from 'src/services/query/user';
 import { Button, Dialog, DialogContent, DialogTitle, TextField } from '@mui/material';
 import { toast } from 'react-toastify';
 import { useState } from 'react';
+import { adminMailSend } from 'src/services/query/mails';
+import { Add, Send } from '@mui/icons-material';
 
 const columns = [
   { id: 'username', label: 'Name' },
@@ -32,18 +34,33 @@ const filterFields = [
 
 const UsersManagement = () => {
   const [open, setOpen] = useState(false);
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const [referral, setReferral] = useState(null);
+  const [emailDialogOpen, setEmailDialogOpen] = useState(false);
+  const [selectedUsers, setSelectedUsers] = useState([]);
+
+  const onselectionchange = (users) => {
+    setSelectedUsers(users);
+  };
+
   const handleSubmit = async (data) => {
     try {
       const res = await createReferrals(data);
       setOpen(false);
-      toast.success(`Your referral code is ${res.data.referral_code}`);
-      setDialogOpen(true);
-      setReferral(res.data.referral_code);
+      toast.success(`Your referral code is sent to ${data.email}.`);
     } catch (error) {
       toast.error('Error creating Referral code.');
     } finally {
+    }
+  };
+  const handleMailSend = async (data) => {
+    try {
+      const res = await adminMailSend({
+        ...data,
+        recipients: selectedUsers.map((data) => data.username),
+      });
+      setEmailDialogOpen(false);
+      toast.success('Email sent successfully.');
+    } catch (error) {
+      toast.error('Error sending mail');
     }
   };
 
@@ -51,56 +68,98 @@ const UsersManagement = () => {
     <Grid container spacing={6}>
       <Grid item xs={12}>
         <Card>
-          <Dialog
-            open={dialogOpen}
-            onClose={() => {
-              setDialogOpen(false);
-              setReferral(null);
-            }}
-          >
-            <DialogTitle>Referral Code</DialogTitle>
-            <DialogContent className="d-flex align-items-center">
-              <p style={{ margin: 0, padding: 0, fontSize: 16 }}>Your referral code is: </p>
-              <TextField value={referral} />
-            </DialogContent>
-          </Dialog>
-          <FormModalButton
-            open={open}
-            setOpen={setOpen}
-            className="d-flex m-3 justify-content-end"
-            buttonTitle="+ New Invitation"
-            heading="Send Invitation"
-          >
-            <FormBuilder onSubmit={handleSubmit}>
-              {(register, errors, { control }) => {
-                return (
-                  <>
-                    <div className="row mt-3">
-                      <Input
-                        name="referred_email"
-                        errors={errors}
-                        required={true}
-                        register={register}
-                        class_name="col-12"
-                        label={'Email'}
-                      />
-                    </div>
+          <div className="d-flex justify-content-end">
+            <FormModalButton
+              open={open}
+              setOpen={setOpen}
+              className="d-flex justify-content-end"
+              buttonTitle={
+                <span>
+                  <Add style={{ fontSize: 18, marginBottom: '2px' }} /> New Invitation
+                </span>
+              }
+              heading="Send Invitation"
+            >
+              <FormBuilder onSubmit={handleSubmit}>
+                {(register, errors, { control }) => {
+                  return (
+                    <>
+                      <div className="row mt-3">
+                        <Input
+                          name="referred_email"
+                          errors={errors}
+                          required={true}
+                          register={register}
+                          class_name="col-12"
+                          label={'Email'}
+                        />
+                      </div>
 
-                    <Button
-                      className="text-right"
-                      type="submit"
-                      variant="contained"
-                      color="primary"
-                    >
-                      Submit
-                    </Button>
-                  </>
-                );
-              }}
-            </FormBuilder>
-          </FormModalButton>
+                      <Button
+                        className="text-right"
+                        type="submit"
+                        variant="contained"
+                        color="primary"
+                      >
+                        Submit
+                      </Button>
+                    </>
+                  );
+                }}
+              </FormBuilder>
+            </FormModalButton>
+            {selectedUsers?.length > 0 && (
+              <FormModalButton
+                className="d-flex ms-3 justify-content-end"
+                buttonTitle={
+                  <span>
+                    <Send style={{ fontSize: 18, marginBottom: '2px' }} /> Send Mails
+                  </span>
+                }
+                heading="Send Mail"
+                onSubmit={() => {}}
+                open={emailDialogOpen}
+                setOpen={setEmailDialogOpen}
+              >
+                <FormBuilder onSubmit={handleMailSend}>
+                  {(register, errors, { control }) => {
+                    return (
+                      <>
+                        <div className="row mt-3">
+                          <Input
+                            name="subject"
+                            register={register}
+                            errors={errors}
+                            required={true}
+                            class_name="col-12"
+                            label={'Subject'}
+                          />
+                          <Textarea
+                            name="body"
+                            register={register}
+                            errors={errors}
+                            required={true}
+                            class_name="col-12"
+                            label={'Email Body'}
+                          />
+                          <Button variant="outlined" type="submit">
+                            Submit
+                          </Button>
+                        </div>
+                      </>
+                    );
+                  }}
+                </FormBuilder>
+              </FormModalButton>
+            )}
+          </div>
           <CardHeader title="User Management" titleTypographyProps={{ variant: 'h6' }} />
-          <TableWithFilter columns={columns} filterFields={filterFields} fetchData={getUsers} />
+          <TableWithFilter
+            columns={columns}
+            filterFields={filterFields}
+            fetchData={getUsers}
+            onSelectionChange={onselectionchange}
+          />
         </Card>
       </Grid>
     </Grid>
