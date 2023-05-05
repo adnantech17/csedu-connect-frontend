@@ -1,6 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@mui/styles';
-import { Avatar, Box, Button, Container, IconButton, Input, Typography } from '@mui/material';
+import {
+  Avatar,
+  Box,
+  Button,
+  CircularProgress,
+  Container,
+  IconButton,
+  Input,
+  Typography,
+} from '@mui/material';
 import { Comment, Favorite, FavoriteBorder } from '@mui/icons-material';
 import { createComment, getBlogDetails, likeBlog, unlikeBlog } from 'src/services/query/blogs';
 import { useParams } from 'react-router';
@@ -49,6 +58,7 @@ function BlogDetailsPage() {
 
   const [blog, setBlog] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [commentLoading, setCommentLoading] = useState(false);
 
   const getBlogDetailsAsync = async () => {
     setLoading(true);
@@ -84,7 +94,7 @@ function BlogDetailsPage() {
   const handleCommentSubmit = async (event) => {
     event.preventDefault();
     setCommentText('');
-    setLoading(true);
+    setCommentLoading(true);
     try {
       await createComment({
         blog: id,
@@ -95,7 +105,7 @@ function BlogDetailsPage() {
     } catch (err) {
       console.log(err);
     } finally {
-      setLoading(false);
+      setCommentLoading(false);
     }
   };
 
@@ -116,46 +126,47 @@ function BlogDetailsPage() {
           <Typography variant="body2">{blog?.comments_count}</Typography>
         </Box>
         <ReactMarkdown rehypePlugins={[rehypeRaw]}>{blog?.content}</ReactMarkdown>
+        <Loader isLoading={commentLoading}>
+          <Box className={classes.commentBox}>
+            <form onSubmit={handleCommentSubmit} className="d-flex">
+              <Input
+                placeholder="Add a comment"
+                value={commentText}
+                onChange={(event) => setCommentText(event.target.value)}
+                className={classes.commentInput}
+              />
+              <Button type="submit" variant="contained">
+                Submit
+              </Button>
+            </form>
+          </Box>
 
-        <Box className={classes.commentBox}>
-          <form onSubmit={handleCommentSubmit} className="d-flex">
-            <Input
-              placeholder="Add a comment"
-              value={commentText}
-              onChange={(event) => setCommentText(event.target.value)}
-              className={classes.commentInput}
-            />
-            <Button type="submit" variant="contained">
-              Submit
-            </Button>
-          </form>
-        </Box>
-
-        <Box className={classes.commentList}>
-          {blog?.comments.map((comment) => (
-            <Card className="p-2 m-2">
-              <Box key={comment.id}>
-                <Box display="flex" alignItems="center">
-                  <Avatar
-                    alt={getFullName(comment.user)}
-                    src={comment.user.profile_picture ?? ProfileImg}
-                    className={classes.avatar}
-                    sx={{
-                      width: 48,
-                      height: 48,
-                    }}
-                  />
-                  <Typography variant="subtitle2" color="primary" className={classes.username}>
-                    {comment.user.username}
-                  </Typography>
-                  <Typography variant="body2" className="ms-1">
-                    {comment.content}
-                  </Typography>
+          <Box className={classes.commentList}>
+            {blog?.comments.map((comment) => (
+              <Card className="p-2 m-2">
+                <Box key={comment.id}>
+                  <Box display="flex" alignItems="center">
+                    <Avatar
+                      alt={getFullName(comment.user)}
+                      src={comment.user.profile_picture ?? ProfileImg}
+                      className={classes.avatar}
+                      sx={{
+                        width: 48,
+                        height: 48,
+                      }}
+                    />
+                    <Typography variant="subtitle2" color="primary" className={classes.username}>
+                      {comment.user.username}
+                    </Typography>
+                    <Typography variant="body2" className="ms-1">
+                      {comment.content}
+                    </Typography>
+                  </Box>
                 </Box>
-              </Box>
-            </Card>
-          ))}
-        </Box>
+              </Card>
+            ))}
+          </Box>
+        </Loader>
       </Loader>
     </Container>
   );

@@ -1,11 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@mui/styles';
-import { Avatar, Box, Button, Container, IconButton, Input, Tab, Typography } from '@mui/material';
+import {
+  Avatar,
+  Box,
+  Button,
+  Container,
+  IconButton,
+  Input,
+  Tab,
+  TextareaAutosize,
+  Typography,
+} from '@mui/material';
 import {
   AdminPanelSettingsOutlined,
   Comment,
   FeedOutlined,
   InfoOutlined,
+  SearchOff,
+  SearchOffOutlined,
   ThumbUp,
   ThumbUpOffAlt,
 } from '@mui/icons-material';
@@ -45,6 +57,7 @@ const useStyles = makeStyles((theme) => ({
   commentInput: {
     width: '100%',
     marginRight: 20,
+    padding: 10,
   },
   commentList: {
     marginTop: 2,
@@ -64,7 +77,7 @@ function EventsDetails() {
 
   const [event, setEvent] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [value, setValue] = useState('account');
+  const [value, setValue] = useState('feed');
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -184,44 +197,58 @@ function EventsDetails() {
           </TabList>
 
           <TabPanel sx={{ p: 0 }} value="feed">
-            <Box className={classes.commentBox}>
-              <form onSubmit={handleCommentSubmit} className="d-flex">
-                <Input
-                  placeholder="Add a comment"
-                  value={commentText}
-                  onChange={(event) => setCommentText(event.target.value)}
-                  className={classes.commentInput}
-                />
-                <Button type="submit" variant="contained">
-                  Submit
-                </Button>
-              </form>
-            </Box>
+            {event?.is_manager && (
+              <Box className={classes.commentBox}>
+                <form onSubmit={handleCommentSubmit} className="d-flex">
+                  <TextareaAutosize
+                    minRows={4}
+                    placeholder="Add a Post"
+                    value={commentText}
+                    onChange={(event) => setCommentText(event.target.value)}
+                    className={classes.commentInput}
+                  />
+                  <Button type="submit" variant="contained" style={{ height: '32px' }}>
+                    Submit
+                  </Button>
+                </form>
+              </Box>
+            )}
 
             <Box className={classes.commentList}>
-              {event?.comments?.map((comment) => (
-                <Card className="p-2 m-2">
-                  <Box key={comment.id}>
-                    <Box display="flex" alignItems="center">
-                      <Avatar
-                        alt={getFullName(comment.user)}
-                        src={comment.user.profile_picture ?? ProfileImg}
-                        className={classes.avatar}
-                        sx={{
-                          width: 48,
-                          height: 48,
-                        }}
-                      />
-                      <Typography variant="subtitle2" color="primary" className={classes.username}>
-                        {comment.user.username}
-                      </Typography>
-                      <Typography variant="body2" className="ms-1">
-                        {comment.content}
-                      </Typography>
+              {event?.comment?.length ? (
+                event?.comments?.map((comment) => (
+                  <Card className="p-3 m-2">
+                    <Box key={comment.id}>
+                      <Box display="flex" alignItems="center">
+                        <Avatar
+                          alt={getFullName(comment.user)}
+                          src={comment.user.profile_picture ?? ProfileImg}
+                          className={classes.avatar}
+                          sx={{
+                            width: 48,
+                            height: 48,
+                          }}
+                        />
+                        <Typography
+                          variant="subtitle2"
+                          color="primary"
+                          className={classes.username}
+                        >
+                          {comment.user.username}
+                        </Typography>
+                        <Typography variant="body2" className="ms-1">
+                          {comment.content}
+                        </Typography>
+                      </Box>
                     </Box>
-                  </Box>
-                </Card>
-              ))}
+                  </Card>
+                ))
+              ) : (
+                <div className="text-center m-5">
+                  <SearchOffOutlined sx={{ fontSize: 32 }} />
+                  No Posts Yet
+                </div>
+              )}
             </Box>
           </TabPanel>
           <TabPanel sx={{ p: 0 }} value="about">
