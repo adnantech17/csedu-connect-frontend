@@ -15,6 +15,7 @@ import {
   AccordionDetails,
   Typography,
   Box,
+  Checkbox,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import FilterBuilder from './FilterBuilder';
@@ -32,12 +33,24 @@ const useStyles = makeStyles({
   },
 });
 
-const TableWithFilter = ({ columns, fetchData, filterFields, forceReload = false }) => {
+const TableWithFilter = ({
+  columns,
+  fetchData,
+  filterFields,
+  forceReload = false,
+  onSelectionChange = () => {},
+}) => {
   const [tableData, setTableData] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [count, setCount] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [selectedRows, setSelectedRows] = useState([]);
+
+  useEffect(() => {
+    onSelectionChange(selectedRows);
+  }, [selectedRows, onSelectionChange]);
+
   const classes = useStyles();
 
   const handleFilterSubmit = (data) => {
@@ -88,6 +101,21 @@ const TableWithFilter = ({ columns, fetchData, filterFields, forceReload = false
             <Table className={classes.table}>
               <TableHead>
                 <TableRow>
+                  <TableCell padding="checkbox">
+                    <Checkbox
+                      checked={selectedRows.length === tableData.length}
+                      onChange={(event) => {
+                        if (event.target.checked) {
+                          setSelectedRows(tableData);
+                        } else {
+                          setSelectedRows([]);
+                        }
+                      }}
+                      indeterminate={
+                        selectedRows.length > 0 && selectedRows.length < tableData.length
+                      }
+                    />
+                  </TableCell>
                   {columns.map((column) => (
                     <TableCell key={column.id}>{column.label}</TableCell>
                   ))}
@@ -96,6 +124,21 @@ const TableWithFilter = ({ columns, fetchData, filterFields, forceReload = false
               <TableBody>
                 {tableData.map((row, index) => (
                   <TableRow key={row.id} className={index % 2 === 0 ? classes.evenRow : ''}>
+                    <TableCell padding="checkbox">
+                      <Checkbox
+                        checked={selectedRows.includes(row)}
+                        onChange={(event) => {
+                          const currentRow = row;
+                          setSelectedRows((prevSelectedRows) => {
+                            if (prevSelectedRows.includes(currentRow)) {
+                              return prevSelectedRows.filter((prevRow) => prevRow !== currentRow);
+                            } else {
+                              return [...prevSelectedRows, currentRow];
+                            }
+                          });
+                        }}
+                      />
+                    </TableCell>
                     {columns.map((column) => (
                       <TableCell className="" key={column.id}>
                         {column.render ? column.render(row[column.id], row) : row[column.id] || '-'}

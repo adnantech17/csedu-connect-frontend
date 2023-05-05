@@ -19,5 +19,12 @@ const endpoints = {
   COMMENTS: 'blogs/comments/',
 
   EVENTS: 'events/',
+
+  MAILS: 'mails/',
+  SYSTEM_MAILS: 'mails/system/',
+  USER_MAILS: 'mails/user/',
+  ADMIN_SEND_MAILS: 'mails/admin-send/',
+  USER_SEND_MAIL: 'mails/send/',
+  MY_SENT_MAILS: 'mails/sent-mails/',
 };
 export default endpoints;

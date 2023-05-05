@@ -1,15 +1,27 @@
-import { Button, Card, CardHeader, Grid } from '@mui/material';
+import { Card, CardHeader } from '@mui/material';
 import React from 'react';
 import TableWithFilter from 'src/components/tables/TableWithFilter';
 import FormModalButton from 'src/components/tables/FormModalButton';
 import { FormBuilder, Select, Textarea } from 'src/components/forms/FormBuilder';
-import { login } from 'src/services/query/login';
+import { getUserMails } from 'src/services/query/mails';
+import { formatDateTime, getFullName } from 'src/views/utilities/utils';
+import { Close, Done } from '@mui/icons-material';
 
 const columns = [
-  { id: 'from', label: 'From' },
-  { id: 'to', label: 'To' },
-  { id: 'date', label: 'Date' },
-  { id: 'time', label: 'Time' },
+  { id: 'sender', label: 'From', render: (data) => getFullName(data) },
+  {
+    id: 'recipients',
+    label: 'To',
+    render: (data) => (data?.length > 1 ? 'Multiple Recipients' : getFullName(data[0])),
+  },
+  { id: 'sent_at', label: 'Date', render: (data) => formatDateTime(data) },
+  { id: 'subject', label: 'Subject' },
+  {
+    id: 'is_mail_private',
+    label: 'Private',
+    render: (data) =>
+      data ? <Done style={{ color: 'green' }} /> : <Close style={{ color: 'red' }} />,
+  },
 ];
 
 const filterFields = [
@@ -17,25 +29,11 @@ const filterFields = [
   { label: 'To', field: 'to', type: 'string' },
 ];
 
-const emails = [
-  { id: 1, from: 'John Smith', to: 'Jane Doe', date: '2022-03-25', time: '10:30 AM' },
-  { id: 2, from: 'Jane Doe', to: 'Robert Johnson', date: '2022-03-26', time: '3:45 PM' },
-  { id: 3, from: 'Robert Johnson', to: 'Alice Brown', date: '2022-03-27', time: '9:15 AM' },
-  { id: 4, from: 'Alice Brown', to: 'Tom Lee', date: '2022-03-28', time: '2:00 PM' },
-  { id: 5, from: 'Tom Lee', to: 'John Smith', date: '2022-03-29', time: '11:45 AM' },
-];
-
-function getData() {
-  return new Promise((resolve, reject) => {
-    resolve({ results: emails, success: true, meta: { count: emails.length } });
-  });
-}
-
 const EmailsManagement = () => {
   return (
     <div>
       <Card>
-        <FormModalButton
+        {/* <FormModalButton
           className="d-flex m-3 justify-content-end"
           buttonTitle="+ New Mail"
           heading="Send Mail"
@@ -72,9 +70,9 @@ const EmailsManagement = () => {
               );
             }}
           </FormBuilder>
-        </FormModalButton>
+        </FormModalButton> */}
         <CardHeader title="Email Management" titleTypographyProps={{ variant: 'h6' }} />
-        <TableWithFilter columns={columns} filterFields={filterFields} fetchData={getData} />
+        <TableWithFilter columns={columns} filterFields={filterFields} fetchData={getUserMails} />
       </Card>
     </div>
   );
