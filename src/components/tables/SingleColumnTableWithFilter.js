@@ -114,8 +114,8 @@ const SingleColumnTableWithFilter = ({ columns, fetchData, filterFields }) => {
                           <div className="d-flex justify-content-between">
                             <div className="d-flex align-items-center">
                               <Avatar
-                                src={ProfileImg}
-                                alt={ProfileImg}
+                                src={row.profile_picture || ProfileImg}
+                                alt={row.profile_picture || ProfileImg}
                                 sx={{
                                   width: 48,
                                   height: 48,

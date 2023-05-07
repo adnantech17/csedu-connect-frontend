@@ -13,6 +13,7 @@ import AuthGuard from 'src/components/container/AuthGuard';
 import BlogDetailsPage from 'src/views/user/blogs/BlogDetails';
 import EventsDetails from 'src/views/user/events/EventDetails';
 import StudentDetails from 'src/views/user/students/StudentDetails';
+import HallOfFame from 'src/views/admin/hall-of-fame/HallOfFame';
 
 /* ***Layouts**** */
 const FullLayout = Loadable(lazy(() => import('../layouts/full/FullLayout')));
@@ -20,7 +21,6 @@ const BlankLayout = Loadable(lazy(() => import('../layouts/blank/BlankLayout')))
 
 /* ****Pages***** */
 const Dashboard = Loadable(lazy(() => import('../views/dashboard/Dashboard')));
-const SamplePage = Loadable(lazy(() => import('../views/sample-page/SamplePage')));
 const Icons = Loadable(lazy(() => import('../views/icons/Icons')));
 const TypographyPage = Loadable(lazy(() => import('../views/utilities/TypographyPage')));
 const Shadow = Loadable(lazy(() => import('../views/utilities/Shadow')));
@@ -33,13 +33,31 @@ const Router = [
     path: '/',
     element: <FullLayout />,
     children: [
-      { path: '/', element: <Navigate to="/accounts-management" /> },
+      { path: '/', element: <Navigate to="/dashboard" /> },
+      {
+        path: '/dashboard',
+        exact: true,
+        element: (
+          <AuthGuard>
+            <Dashboard />
+          </AuthGuard>
+        ),
+      },
       {
         path: '/users-management',
         exact: true,
         element: (
           <AuthGuard>
             <UsersManagement />
+          </AuthGuard>
+        ),
+      },
+      {
+        path: '/hall-of-fame',
+        exact: true,
+        element: (
+          <AuthGuard>
+            <HallOfFame />
           </AuthGuard>
         ),
       },

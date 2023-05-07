@@ -55,6 +55,7 @@ const Blogs = () => {
   useEffect(() => {
     getAllBlogs();
   }, []);
+
   return (
     <Loader isLoading={loading}>
       <FormModalButton
@@ -78,19 +79,10 @@ const Blogs = () => {
                     class_name="col-12"
                     label={'Blog Title'}
                   />
-                  {/* <Textarea
-                    name="content"
-                    register={register}
-                    errors={errors}
-                    required={true}
-                    class_name="col-12"
-                    label={'Blog Description'}
-                  /> */}
                   <RichTextEditor
                     control={control}
                     name="content"
                     errors={errors}
-                    // required={true}
                     class_name="col-12"
                     label={'Blog Description'}
                   />
@@ -112,6 +104,7 @@ const Blogs = () => {
             <BlogPostCard
               handleDelete={handleDelete}
               id={blog.id}
+              showDelete={blog.can_delete}
               title={blog.title}
               author={getFullName(blog.user)}
               short_details={getShortDetails(blog.content_head, 150)}

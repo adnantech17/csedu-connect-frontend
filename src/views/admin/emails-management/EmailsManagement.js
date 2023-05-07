@@ -1,11 +1,12 @@
 import { Card, CardHeader } from '@mui/material';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import TableWithFilter from 'src/components/tables/TableWithFilter';
 import FormModalButton from 'src/components/tables/FormModalButton';
 import { FormBuilder, Select, Textarea } from 'src/components/forms/FormBuilder';
 import { getUserMails } from 'src/services/query/mails';
 import { formatDateTime, getFullName } from 'src/views/utilities/utils';
 import { Close, Done } from '@mui/icons-material';
+import { getUsers } from 'src/services/query/user';
 
 const columns = [
   { id: 'sender', label: 'From', render: (data) => getFullName(data) },
@@ -24,12 +25,43 @@ const columns = [
   },
 ];
 
-const filterFields = [
-  { label: 'From', field: 'from', type: 'string' },
-  { label: 'To', field: 'to', type: 'string' },
-];
-
 const EmailsManagement = () => {
+  const [users, setUsers] = useState([]);
+  const filterFields = [
+    {
+      label: 'From',
+      field: 'sender',
+      type: 'select',
+      options: users.map((user) => ({
+        name: getFullName(user),
+        value: user.username,
+      })),
+    },
+    {
+      label: 'To',
+      field: 'recipient',
+      type: 'select',
+      options: users.map((user) => ({
+        name: getFullName(user),
+        value: user.username,
+      })),
+    },
+  ];
+
+  const getAllUsers = async () => {
+    try {
+      const res = await getUsers();
+      setUsers(res);
+    } catch (error) {
+      console.log(error);
+    } finally {
+    }
+  };
+
+  useEffect(() => {
+    getAllUsers();
+  }, []);
+
   return (
     <div>
       <Card>

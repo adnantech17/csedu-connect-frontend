@@ -37,6 +37,13 @@ const Menuitems = [
     admin: true,
   },
   {
+    id: uniqueId(),
+    title: 'Hall of Fame',
+    icon: AccountCircleOutlined,
+    href: '/hall-of-fame',
+    admin: true,
+  },
+  {
     navlabel: true,
     subheader: 'User Panel',
     admin: false,

@@ -80,7 +80,11 @@ function StudentDetails() {
               }}
             />
             <Typography variant="h6" sx={{ marginBottom: 2 }}>
-              {selectedUser && getFullName(selectedUser)} ({selectedUser?.username})
+              {selectedUser &&
+                selectedUser.first_name &&
+                selectedUser.last_name &&
+                `${selectedUser.first_name} ${selectedUser.last_name}`}{' '}
+              ({selectedUser?.username})
             </Typography>
           </div>
           <Col md={6} className="p-2">

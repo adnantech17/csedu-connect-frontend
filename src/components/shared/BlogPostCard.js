@@ -7,7 +7,7 @@ import CardContent from '@mui/material/CardContent';
 import { useNavigate } from 'react-router';
 import ConfirmationPopup from '../popup/ConfirmationPopup';
 
-const BlogPostCard = ({ title, author, short_details, image, id, handleDelete }) => {
+const BlogPostCard = ({ title, author, short_details, image, id, handleDelete, showDelete }) => {
   const navigate = useNavigate();
   return (
     <Card>
@@ -22,11 +22,13 @@ const BlogPostCard = ({ title, author, short_details, image, id, handleDelete })
       <Button sx={{ margin: 2 }} onClick={() => navigate(`/blogs-list/${id}`)}>
         Read More
       </Button>
-      <ConfirmationPopup onConfirm={() => handleDelete(id)}>
-        <Button sx={{ margin: 2 }} variant="contained" color="error">
-          Delete
-        </Button>
-      </ConfirmationPopup>
+      {showDelete && (
+        <ConfirmationPopup onConfirm={() => handleDelete(id)}>
+          <Button sx={{ margin: 2 }} variant="contained" color="error">
+            Delete
+          </Button>
+        </ConfirmationPopup>
+      )}
     </Card>
   );
 };

@@ -6,6 +6,7 @@ import TableWithFilter from 'src/components/tables/TableWithFilter';
 import {
   addManager,
   createEvent,
+  deleteEvent,
   deleteManager,
   getEvents,
   updateEvent,
@@ -27,6 +28,8 @@ import { uploadImage } from 'src/services/query/image';
 import { getUsers } from 'src/services/query/user';
 import { IconCross } from '@tabler/icons';
 import { RemoveCircleOutline } from '@mui/icons-material';
+import ConfirmationPopup from 'src/components/popup/ConfirmationPopup';
+import ThumbImg from 'src/components/shared/ThumbImg';
 
 // ** Demo Components Imports
 
@@ -40,6 +43,7 @@ const EventsManagement = () => {
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   const [managers, setManagers] = useState([]);
+  const [currentImg, setCurrentImg] = useState(null);
 
   const handleSubmit = async (data) => {
     try {
@@ -47,7 +51,7 @@ const EventsManagement = () => {
       await (selectedEvent ? updateEvent : createEvent)({
         ...data,
         id: selectedEvent?.id,
-        cover_picture: imageUrl,
+        cover_picture: imageUrl || currentImg,
       });
       setOpen(false);
       setForceReload((state) => !state);
@@ -84,7 +88,9 @@ const EventsManagement = () => {
       await addManager(selectedEvent.id, selectedUser);
       setManagers((state) => [...state, selectedUser]);
       setForceReload((state) => !state);
+      toast.success('Manager Added!');
     } catch (error) {
+      toast.error('Error adding Manager!');
       console.log(error);
     }
   };
@@ -94,7 +100,20 @@ const EventsManagement = () => {
       await deleteManager(selectedEvent.id, user);
       setManagers((state) => state.filter((u) => u.id !== user.id));
       setForceReload((state) => !state);
+      toast.success('Manager Removed!');
     } catch (error) {
+      console.log(error);
+      toast.error('Error removing Manager!');
+    }
+  };
+
+  const handleDeleteEvent = async (id) => {
+    try {
+      await deleteEvent(id);
+      toast.success('Event Deleted Successfully!');
+      setForceReload((state) => !state);
+    } catch (error) {
+      toast.error('Event Deletion Failed!');
       console.log(error);
     }
   };
@@ -112,29 +131,44 @@ const EventsManagement = () => {
       label: 'End at',
       render: (data) => formatDateTime(data),
     },
-    { id: 'total_participants', label: 'Total Participants' },
+    { id: 'guest_count', label: 'Total Participants', render: (data) => data },
     {
       id: 'action',
-      label: 'Total Participants',
+      label: 'Actions',
       render: (_, row) => (
         <div>
-          <Button
-            onClick={() => {
-              setSelectedEvent(row);
-              setOpen(true);
-            }}
-          >
-            Edit
-          </Button>
-          <Button
-            onClick={() => {
-              setSelectedEvent(row);
-              setOpenManager(true);
-              setManagers(row.managers);
-            }}
-          >
-            Add Manager
-          </Button>
+          {row.is_manager && (
+            <Button
+              onClick={() => {
+                setCurrentImg(row?.cover_picture);
+                setSelectedEvent(row);
+                setOpen(true);
+              }}
+              size="small"
+            >
+              Edit
+            </Button>
+          )}
+          {row.is_manager && (
+            <Button
+              onClick={() => {
+                setSelectedEvent(row);
+                setOpenManager(true);
+                console.log(row);
+                setManagers(row.managers);
+              }}
+              size="small"
+            >
+              Add Manager
+            </Button>
+          )}
+          {row.is_creator_or_superuser && (
+            <ConfirmationPopup onConfirm={() => handleDeleteEvent(row.id)}>
+              <Button color="error" variant="contained" size="small">
+                Delete
+              </Button>
+            </ConfirmationPopup>
+          )}
         </div>
       ),
     },
@@ -250,12 +284,23 @@ const EventsManagement = () => {
                     />
                   </div>
                   <div className="row mt-3">
+                    {currentImg && (
+                      <ThumbImg
+                        src={selectedEvent?.cover_picture}
+                        style={{ width: '64px', height: 'auto', objectFit: 'contain' }}
+                        onClose={() => {
+                          setCurrentImg(null);
+                        }}
+                      />
+                    )}
                     <FileInput
                       name="image"
                       errors={errors}
-                      required={true}
                       register={register}
                       class_name="col-12"
+                      onChange={() => {
+                        setCurrentImg(null);
+                      }}
                       label={'Cover Picture'}
                     />
                   </div>

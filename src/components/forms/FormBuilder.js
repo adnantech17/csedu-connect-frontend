@@ -351,7 +351,7 @@ export function RichTextEditor({
               <div className="w-100">
                 <label>{label}</label>
                 <Editor
-                  apiKey="YOUR_API_KEY"
+                  apiKey={process.env.REACT_APP_TINY_MCE_API_KEY}
                   value={value}
                   init={{
                     height: 500,

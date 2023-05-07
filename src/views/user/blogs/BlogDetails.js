@@ -156,7 +156,7 @@ function BlogDetailsPage() {
                       }}
                     />
                     <Typography variant="subtitle2" color="primary" className={classes.username}>
-                      {comment.user.username}
+                      {getFullName(comment.user)}
                     </Typography>
                     <Typography variant="body2" className="ms-1">
                       {comment.content}

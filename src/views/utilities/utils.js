@@ -1,5 +1,11 @@
+import { Link } from '@mui/material';
+
 export function getFullName(user) {
-  return user.first_name ? `${user.first_name} ${user.last_name}` : user.username;
+  return (
+    <Link href={`/students-list/${user.username}`}>
+      {user.first_name ? `${user.first_name} ${user.last_name}` : user.username}
+    </Link>
+  );
 }
 
 export function getShortDetails(content_head, max_len) {

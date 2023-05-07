@@ -32,14 +32,20 @@ const columns = [
   },
 ];
 
-const filterFields = [
-  { label: 'From', field: 'from', type: 'string' },
-  { label: 'To', field: 'to', type: 'string' },
-];
-
 const Emails = () => {
   const [users, setUsers] = useState([]);
   const [open, setOpen] = useState(false);
+  const filterFields = [
+    {
+      label: 'To',
+      field: 'recipient',
+      type: 'select',
+      options: users.map((user) => ({
+        name: getFullName(user),
+        value: user.username,
+      })),
+    },
+  ];
 
   const getAllUsers = async () => {
     try {

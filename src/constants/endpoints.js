@@ -27,5 +27,7 @@ const endpoints = {
   ADMIN_SEND_MAILS: 'mails/admin-send/',
   USER_SEND_MAIL: 'mails/send/',
   MY_SENT_MAILS: 'mails/sent-mails/',
+
+  CARDS: 'cards/',
 };
 export default endpoints;

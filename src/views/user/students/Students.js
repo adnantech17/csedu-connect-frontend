@@ -16,6 +16,8 @@ const columns = [
 ];
 
 const filterFields = [
+  { label: 'Name', field: 'name', type: 'string' },
+  { label: 'Username', field: 'username', type: 'string' },
   { label: 'Batch', field: 'batch', type: 'string' },
   { label: 'Company', field: 'company', type: 'string' },
   { label: 'Hometown', field: 'hometown', type: 'string' },

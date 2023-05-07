@@ -8,7 +8,7 @@ import { FormBuilder, Input, Textarea } from 'src/components/forms/FormBuilder';
 import FormModalButton from 'src/components/tables/FormModalButton';
 import TableWithFilter from 'src/components/tables/TableWithFilter';
 import { createReferrals, getUsers, makeAdmin } from 'src/services/query/user';
-import { Button, Dialog, DialogContent, DialogTitle, TextField } from '@mui/material';
+import { Button } from '@mui/material';
 import { toast } from 'react-toastify';
 import { useState } from 'react';
 import { adminMailSend } from 'src/services/query/mails';
@@ -26,6 +26,8 @@ const columns = [
 ];
 
 const filterFields = [
+  { label: 'Name', field: 'name', type: 'string' },
+  { label: 'Username', field: 'username', type: 'string' },
   { label: 'Batch', field: 'batch', type: 'string' },
   { label: 'Company', field: 'company', type: 'string' },
   { label: 'Hometown', field: 'hometown', type: 'string' },
