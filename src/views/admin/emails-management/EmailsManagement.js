@@ -1,32 +1,61 @@
-import { Card, CardHeader } from '@mui/material';
+import {
+  Button,
+  Card,
+  CardHeader,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  TextField,
+} from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import TableWithFilter from 'src/components/tables/TableWithFilter';
-import FormModalButton from 'src/components/tables/FormModalButton';
-import { FormBuilder, Select, Textarea } from 'src/components/forms/FormBuilder';
 import { getUserMails } from 'src/services/query/mails';
-import { formatDateTime, getFullName } from 'src/views/utilities/utils';
+import { formatDateTime, getFullName, getFullNameAlt } from 'src/views/utilities/utils';
 import { Close, Done } from '@mui/icons-material';
 import { getUsers } from 'src/services/query/user';
-
-const columns = [
-  { id: 'sender', label: 'From', render: (data) => getFullName(data) },
-  {
-    id: 'recipients',
-    label: 'To',
-    render: (data) => (data?.length > 1 ? 'Multiple Recipients' : getFullName(data[0])),
-  },
-  { id: 'sent_at', label: 'Date', render: (data) => formatDateTime(data) },
-  { id: 'subject', label: 'Subject' },
-  {
-    id: 'is_mail_private',
-    label: 'Private',
-    render: (data) =>
-      data ? <Done style={{ color: 'green' }} /> : <Close style={{ color: 'red' }} />,
-  },
-];
+import { Row } from 'react-bootstrap';
+import { ReactMarkdown } from 'react-markdown/lib/react-markdown';
+import rehypeRaw from 'rehype-raw';
 
 const EmailsManagement = () => {
   const [users, setUsers] = useState([]);
+  const [selectedMail, setSelectedMail] = useState(null);
+  const [open, setOpen] = useState(false);
+
+  const columns = [
+    { id: 'sender', label: 'From', render: (data) => getFullName(data) },
+    {
+      id: 'recipients',
+      label: 'To',
+      render: (data) => (data?.length > 1 ? 'Multiple Recipients' : getFullName(data[0])),
+    },
+    { id: 'sent_at', label: 'Date', render: (data) => formatDateTime(data) },
+    { id: 'subject', label: 'Subject' },
+    {
+      id: 'is_mail_private',
+      label: 'Private',
+      render: (data) =>
+        data ? <Done style={{ color: 'green' }} /> : <Close style={{ color: 'red' }} />,
+    },
+    {
+      id: 'action',
+      label: 'Actions',
+      render: (_, row) => (
+        <div>
+          <Button
+            onClick={() => {
+              setSelectedMail(row);
+              setOpen(true);
+            }}
+            size="small"
+          >
+            View
+          </Button>
+        </div>
+      ),
+    },
+  ];
+
   const filterFields = [
     {
       label: 'From',
@@ -65,44 +94,31 @@ const EmailsManagement = () => {
   return (
     <div>
       <Card>
-        {/* <FormModalButton
-          className="d-flex m-3 justify-content-end"
-          buttonTitle="+ New Mail"
-          heading="Send Mail"
-          onSubmit={() => {}}
-        >
-          <FormBuilder
-            onSubmit={(d) => {
-              console.log(d);
-            }}
-          >
-            {(register, errors, { control }) => {
-              return (
-                <>
-                  <div className="row mt-3">
-                    <Select
-                      name="receiver"
-                      control={control}
-                      errors={errors}
-                      required={true}
-                      class_name="col-12"
-                      label={'Receiver'}
-                      options={[{ name: 'Adnan', value: 'adnantech17' }]}
-                    />
-                    <Textarea
-                      name="email_body"
-                      register={register}
-                      errors={errors}
-                      required={true}
-                      class_name="col-12"
-                      label={'Email Body'}
-                    />
-                  </div>
-                </>
-              );
-            }}
-          </FormBuilder>
-        </FormModalButton> */}
+        <Dialog open={open} onClose={() => setOpen(false)} maxWidth={'lg'}>
+          <DialogTitle>Email</DialogTitle>
+          <DialogContent className="align-items-center m-3">
+            <Row>
+              <TextField
+                value={selectedMail?.recipients?.map?.((r) => getFullNameAlt(r)).join(', ')}
+                label="Recipient"
+                className="mb-3 mt-3 "
+              />
+            </Row>
+            <Row>
+              <TextField value={selectedMail?.subject} label="Subject" className="mb-3 w-100" />
+            </Row>
+            <Row
+              style={{
+                maxWidth: '450px',
+                border: '1px solid gray',
+                borderRadius: '8px',
+                padding: 10,
+              }}
+            >
+              <ReactMarkdown rehypePlugins={[rehypeRaw]}>{selectedMail?.body}</ReactMarkdown>
+            </Row>
+          </DialogContent>
+        </Dialog>
         <CardHeader title="Email Management" titleTypographyProps={{ variant: 'h6' }} />
         <TableWithFilter columns={columns} filterFields={filterFields} fetchData={getUserMails} />
       </Card>

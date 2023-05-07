@@ -13,7 +13,8 @@ const endpoints = {
   ACADEMIC: 'accounts/profile/academic-histories/',
   CREATE_EXPERIENCE: 'accounts/profile/create/work-experiences/',
   EXPERIENCE: 'accounts/profile/work-experiences/',
-  MANAGE_ADMINS: 'accounts/manage-admin/',
+  MANAGE_ADMINS: 'accounts/make-admin/',
+  REMOVE_ADMIN: 'accounts/remove-admin/',
 
   BLOGS: 'blogs/',
   BLOG_CREATE: 'blogs/create/',

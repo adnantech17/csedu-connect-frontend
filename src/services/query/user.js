@@ -34,6 +34,10 @@ export const makeAdmin = async (data) => {
   });
 };
 
+export const removeAdmin = async (id) => {
+  return await privateAxios.delete(`${endpoints.REMOVE_ADMIN}${id}/`);
+};
+
 export const register = async (data) => {
   return await axios.post(endpoints.REGISTER, {
     ...data,

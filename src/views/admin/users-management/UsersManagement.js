@@ -7,23 +7,14 @@ import CardHeader from '@mui/material/CardHeader';
 import { FormBuilder, Input, Textarea } from 'src/components/forms/FormBuilder';
 import FormModalButton from 'src/components/tables/FormModalButton';
 import TableWithFilter from 'src/components/tables/TableWithFilter';
-import { createReferrals, getUsers, makeAdmin } from 'src/services/query/user';
+import { createReferrals, getUsers, makeAdmin, removeAdmin } from 'src/services/query/user';
 import { Button } from '@mui/material';
 import { toast } from 'react-toastify';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { adminMailSend } from 'src/services/query/mails';
 import { Add, Send } from '@mui/icons-material';
 import ConfirmationPopup from 'src/components/popup/ConfirmationPopup';
-
-const columns = [
-  { id: 'username', label: 'Name' },
-  { id: 'first_name', label: 'First Name' },
-  { id: 'last_name', label: 'Last Name' },
-  { id: 'email_address', label: 'Email' },
-  { id: 'batch_number', label: 'Batch' },
-  { id: 'company', label: 'Company' },
-  { id: 'country', label: 'Country' },
-];
+import { AuthContext } from 'src/context/AuthContext';
 
 const filterFields = [
   { label: 'Name', field: 'name', type: 'string' },
@@ -40,6 +31,7 @@ const UsersManagement = () => {
   const [emailDialogOpen, setEmailDialogOpen] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [forceReload, setForceReload] = useState(false);
+  const { userData } = useContext(AuthContext);
 
   const onselectionchange = (users) => {
     setSelectedUsers(users);
@@ -82,6 +74,17 @@ const UsersManagement = () => {
     }
   };
 
+  const handleRemoveAdmin = async (username) => {
+    try {
+      const res = await removeAdmin(username);
+      setEmailDialogOpen(false);
+      setForceReload((state) => !state);
+      toast.success('Admin removed.');
+    } catch (error) {
+      toast.error('Error removing Admin!');
+    }
+  };
+
   const columns = [
     { id: 'username', label: 'Name' },
     { id: 'first_name', label: 'First Name' },
@@ -94,13 +97,22 @@ const UsersManagement = () => {
       id: 'admin',
       label: 'Actions',
       render: (_, row) =>
-        !row.is_admin && (
-          <ConfirmationPopup onConfirm={() => handleAdmin(row.username)}>
-            <Button>Make Admin</Button>
-          </ConfirmationPopup>
-        ),
+        !row.is_admin
+          ? userData.is_admin && (
+              <ConfirmationPopup size="small" onConfirm={() => handleAdmin(row.username)}>
+                <Button>Make Admin</Button>
+              </ConfirmationPopup>
+            )
+          : userData.is_superuser && (
+              <ConfirmationPopup onConfirm={() => handleRemoveAdmin(row.username)}>
+                <Button color="error" size="small">
+                  Remove Admin
+                </Button>
+              </ConfirmationPopup>
+            ),
     },
   ];
+
   return (
     <Grid container spacing={6}>
       <Grid item xs={12}>

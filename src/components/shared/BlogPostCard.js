@@ -12,23 +12,39 @@ const BlogPostCard = ({ title, author, short_details, image, id, handleDelete, s
   return (
     <Card>
       <CardMedia sx={{ height: '9.375rem' }} image={image} />
-      <CardContent sx={{ padding: (theme) => `${theme.spacing(3, 5.25, 4)} !important` }}>
-        <Typography variant="h6" sx={{ marginBottom: 2 }}>
+      <CardContent sx={{ padding: (theme) => `${theme.spacing(2, 3, 2)} !important` }}>
+        <Typography variant="h4" sx={{ marginBottom: 1 }}>
           {title}
         </Typography>
-        <Typography sx={{ marginBottom: 2 }}>{author}</Typography>
+        <Typography sx={{ marginBottom: 1 }}>{author}</Typography>
         <Typography variant="body2">{short_details}</Typography>
       </CardContent>
-      <Button sx={{ margin: 2 }} onClick={() => navigate(`/blogs-list/${id}`)}>
-        Read More
-      </Button>
-      {showDelete && (
-        <ConfirmationPopup onConfirm={() => handleDelete(id)}>
-          <Button sx={{ margin: 2 }} variant="contained" color="error">
-            Delete
-          </Button>
-        </ConfirmationPopup>
-      )}
+      <div className="d-flex">
+        <Button
+          style={{ flex: 1, borderRadius: 0 }}
+          size="small"
+          sx={{ margin: 1 }}
+          onClick={() => navigate(`/blogs-list/${id}`)}
+          className="w-100 m-0"
+          color="primary"
+          variant="contained"
+        >
+          Read More
+        </Button>
+        {showDelete && (
+          <ConfirmationPopup onConfirm={() => handleDelete(id)} style={{ flex: 1 }}>
+            <Button
+              sx={{ margin: 1, borderRadius: 0 }}
+              variant="contained"
+              color="error"
+              size="small"
+              className="w-100 m-0"
+            >
+              Delete
+            </Button>
+          </ConfirmationPopup>
+        )}
+      </div>
     </Card>
   );
 };

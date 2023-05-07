@@ -8,7 +8,7 @@ import {
 } from '@mui/material';
 import { useState } from 'react';
 
-function ConfirmationPopup({ children, onConfirm }) {
+function ConfirmationPopup({ children, onConfirm, style }) {
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => {
@@ -26,7 +26,9 @@ function ConfirmationPopup({ children, onConfirm }) {
 
   return (
     <>
-      <span onClick={handleOpen}>{children}</span>
+      <span style={style} onClick={handleOpen}>
+        {children}
+      </span>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Confirmation</DialogTitle>
         <DialogContent>
