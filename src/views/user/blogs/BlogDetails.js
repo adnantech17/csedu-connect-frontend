@@ -125,6 +125,12 @@ function BlogDetailsPage() {
           </IconButton>
           <Typography variant="body2">{blog?.comments_count}</Typography>
         </Box>
+        {blog?.cover_picture && (
+          <img
+            src={blog?.cover_picture}
+            style={{ width: '100%', height: '60vh', margin: 'auto', objectFit: 'cover' }}
+          />
+        )}
         <ReactMarkdown rehypePlugins={[rehypeRaw]}>{blog?.content}</ReactMarkdown>
         <Loader isLoading={commentLoading}>
           <Box className={classes.commentBox}>

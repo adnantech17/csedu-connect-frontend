@@ -11,10 +11,16 @@ const LinkStyled = styled(Link)(() => ({
 
 const Logo = () => {
   return (
-    <LinkStyled to="/">
-      <LogoDark height={70} />
-    </LinkStyled>
-  )
+    <div className="d-flex">
+      <LinkStyled to="/" style={{ width: 100 }}>
+        <LogoDark height={70} />
+      </LinkStyled>
+      <div>
+        <h3 className="mb-0 mt-1">CSEDU</h3>
+        <h6 style={{ letterSpacing: 2 }}>CONNECT</h6>
+      </div>
+    </div>
+  );
 };
 
 export default Logo;
