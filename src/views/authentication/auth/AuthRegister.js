@@ -84,7 +84,7 @@ const AuthRegister = ({ title, subtitle, subtext }) => {
                   control={control}
                   errors={errors}
                   required={true}
-                  class_name="col-6"
+                  class_name="col-12"
                   label={'Gender'}
                   options={[
                     { name: 'Male', value: 'M' },

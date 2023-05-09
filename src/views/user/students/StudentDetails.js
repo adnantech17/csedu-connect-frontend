@@ -7,6 +7,8 @@ import { getFullName } from 'src/views/utilities/utils';
 import ProfileImg from 'src/assets/images/profile/user-1.jpg';
 import { Col, Row } from 'react-bootstrap';
 import { getUserDetailByUsername } from 'src/services/query/user';
+import { Link } from 'react-router-dom';
+import { FacebookRounded, LinkedIn, Twitter } from '@mui/icons-material';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -86,6 +88,20 @@ function StudentDetails() {
                 `${selectedUser.first_name} ${selectedUser.last_name}`}{' '}
               ({selectedUser?.username})
             </Typography>
+
+            <Row className="text-center mt-1 mb-2 d-flex w-100 flex-row justify-content-center">
+              {selectedUser?.social_media_links?.map((social) => (
+                <a href={social.link} style={{ width: '32px' }}>
+                  {social.platform_name === 'Facebook' ? (
+                    <FacebookRounded />
+                  ) : social.platform_name === 'Twitter' ? (
+                    <Twitter />
+                  ) : (
+                    <LinkedIn />
+                  )}
+                </a>
+              ))}
+            </Row>
           </div>
           <Col md={6} className="p-2">
             <TextField
