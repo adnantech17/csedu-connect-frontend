@@ -3,6 +3,7 @@ import { Box, Typography, Button } from '@mui/material';
 
 import { FormBuilder, Input } from 'src/components/forms/FormBuilder';
 import { AuthContext } from 'src/context/AuthContext';
+import { toast } from 'react-toastify';
 
 const AuthLogin = ({ title, subtitle, subtext }) => {
   const { loginToAccount } = useContext(AuthContext);
@@ -11,8 +12,10 @@ const AuthLogin = ({ title, subtitle, subtext }) => {
     try {
       const res = await loginToAccount(data);
       console.log(res);
+      toast.success(`You are successfully logged in.`);
     } catch (error) {
       console.log(error);
+      toast.error(`Invalid Login Credentials.`);
     } finally {
     }
   };

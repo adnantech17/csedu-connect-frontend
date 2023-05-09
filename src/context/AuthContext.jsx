@@ -53,7 +53,7 @@ export const AuthContextProvider = ({ children }) => {
       LocalStorage.setData(localStorage, STORAGE_KEY_ACCESS_TOKEN, data.token);
       LocalStorage.setData(localStorage, STORAGE_KEY_REFRESH_TOKEN, data.token);
       initialize();
-      navigate('/accounts-management');
+      navigate('/');
     },
     [initialize],
   );
