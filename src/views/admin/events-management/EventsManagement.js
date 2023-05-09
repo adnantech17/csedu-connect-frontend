@@ -318,7 +318,7 @@ const EventsManagement = () => {
           <TableWithFilter
             forceReload={forceReload}
             columns={columns}
-            filterFields={filterFields}
+            filterFields={null}
             fetchData={getEvents}
           />
         </Card>
