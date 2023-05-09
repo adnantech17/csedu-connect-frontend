@@ -7,10 +7,8 @@ import Profile from './Profile';
 import { IconBellRinging, IconMenu } from '@tabler/icons';
 
 const Header = (props) => {
-
   // const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'));
   // const lgDown = useMediaQuery((theme) => theme.breakpoints.down('lg'));
-
 
   const AppBarStyled = styled(AppBar)(({ theme }) => ({
     boxShadow: 'none',
@@ -35,16 +33,15 @@ const Header = (props) => {
           onClick={props.toggleMobileSidebar}
           sx={{
             display: {
-              lg: "none",
-              xs: "inline",
+              lg: 'none',
+              xs: 'inline',
             },
           }}
         >
           <IconMenu width="20" height="20" />
         </IconButton>
 
-
-        <IconButton
+        {/* <IconButton
           size="large"
           aria-label="show 11 new notifications"
           color="inherit"
@@ -60,7 +57,7 @@ const Header = (props) => {
             <IconBellRinging size="21" stroke="1.5" />
           </Badge>
 
-        </IconButton>
+        </IconButton> */}
         <Box flexGrow={1} />
         <Stack spacing={1} direction="row" alignItems="center">
           <Profile />
