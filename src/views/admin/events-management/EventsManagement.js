@@ -11,7 +11,7 @@ import {
   getEvents,
   updateEvent,
 } from 'src/services/query/events';
-import { formatDateTime, getFullName } from 'src/views/utilities/utils';
+import { formatDateTime, getFullName, getFullNameAlt } from 'src/views/utilities/utils';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import FormModalButton from 'src/components/tables/FormModalButton';
@@ -194,7 +194,7 @@ const EventsManagement = () => {
               >
                 {users.map((user) => (
                   <MenuItem key={user.id} value={user}>
-                    {getFullName(user)}
+                    {getFullNameAlt(user)}
                   </MenuItem>
                 ))}
               </Select>
@@ -207,7 +207,7 @@ const EventsManagement = () => {
                 {managers?.map((manager, idx) => (
                   <div className="d-flex justify-content-between">
                     <p>
-                      {idx + 1}. {getFullName(manager)}
+                      {idx + 1}. {getFullNameAlt(manager)}
                     </p>
                     <RemoveCircleOutline
                       className="cursor-pointer"

@@ -72,7 +72,7 @@ const Emails = () => {
       field: 'recipient',
       type: 'select',
       options: users.map((user) => ({
-        name: getFullName(user),
+        name: getFullNameAlt(user),
         value: user.username,
       })),
     },
@@ -152,7 +152,7 @@ const Emails = () => {
                       class_name="col-12"
                       label={'Receiver'}
                       options={users.map((user) => ({
-                        name: getFullName(user),
+                        name: getFullNameAlt(user),
                         value: user.username,
                       }))}
                     />

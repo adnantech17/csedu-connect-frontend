@@ -62,7 +62,7 @@ const EmailsManagement = () => {
       field: 'sender',
       type: 'select',
       options: users.map((user) => ({
-        name: getFullName(user),
+        name: getFullNameAlt(user),
         value: user.username,
       })),
     },
@@ -71,7 +71,7 @@ const EmailsManagement = () => {
       field: 'recipient',
       type: 'select',
       options: users.map((user) => ({
-        name: getFullName(user),
+        name: getFullNameAlt(user),
         value: user.username,
       })),
     },
