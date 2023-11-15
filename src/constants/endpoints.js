@@ -2,6 +2,7 @@ const endpoints = {
   LOGIN: 'accounts/login/',
   LOGOUT: 'accounts/logout/',
   PROFILE: 'accounts/profile/',
+  USER: 'accounts/user/',
   CHANGE_PASS: 'accounts/change-password/',
   USERS: 'accounts/users/',
   PROFILES: 'accounts/profiles/',
