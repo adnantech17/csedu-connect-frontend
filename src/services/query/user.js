@@ -3,7 +3,7 @@ import { privateAxios, axios } from '../request/axiosConfig';
 
 export const getUserDetails = async () => {
   try {
-    const response = await privateAxios.get(`${endpoints.PROFILE}`);
+    const response = await privateAxios.get(`${endpoints.USER}`);
     return response.data;
   } catch (error) {
     throw error;
